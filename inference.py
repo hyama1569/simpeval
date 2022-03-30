@@ -23,7 +23,8 @@ def merge_sent2_ids(allign_id_pairs):
     merge sent2 ids alligned to sent1 ids.
     '''
     merged_sent2_allign_id_pairs = []
-    tuple_pairs = [(int(re.findall(r"\d+", i)[0]), int(re.findall(r"\d+", i)[1])) for i in sorted(allign_id_pairs, key=lambda x:(int(re.findall(r"\d+", x)[0]), int(re.findall(r"\d+", x)[1])))]
+    sorted_allign_id_pairs = sorted(allign_id_pairs, key=lambda x:(int(re.findall(r"\d+", x)[0]), int(re.findall(r"\d+", x)[1])))
+    tuple_pairs = [(int(re.findall(r"\d+", i)[0]), int(re.findall(r"\d+", i)[1])) for i in sorted_allign_id_pairs]
     for pair in tuple_pairs:
         keys = [i[0] for i in merged_sent2_allign_id_pairs]
         keys_flatten = [x for row in keys for x in row]
@@ -115,13 +116,14 @@ if __name__ == "__main__":
         batch = tuple(t.to(my_device) for t in batch)
         input_ids_a_and_b, input_ids_b_and_a, input_mask, segment_ids_a_and_b, segment_ids_b_and_a, sent1_valid_ids, sent2_valid_ids, sent1_wordpiece_length, sent2_wordpiece_length = batch
         with torch.no_grad():
-            allign_id_pairs = model(input_ids_a_and_b=input_ids_a_and_b, input_ids_b_and_a=input_ids_b_and_a,
+            decoded_results = model(input_ids_a_and_b=input_ids_a_and_b, input_ids_b_and_a=input_ids_b_and_a,
                                     attention_mask=input_mask, token_type_ids_a_and_b=segment_ids_a_and_b,
                                     token_type_ids_b_and_a=segment_ids_b_and_a,
                                     sent1_valid_ids=sent1_valid_ids, sent2_valid_ids=sent2_valid_ids,
                                     sent1_wordpiece_length=sent1_wordpiece_length,
                                     sent2_wordpiece_length=sent2_wordpiece_length)
-        #print(list(allign_id_pairs))
+        allign_id_pairs = list(decoded_results[0])
+        #print(allign_id_pairs)
         merged_sent2_allign_id_pairs = merge_sent2_ids(allign_id_pairs)
         merged_sent1_allign_id_pairs = merge_sent1_ids(merged_sent2_allign_id_pairs)
         allign_word_pairs = ids_to_words(merged_sent1_allign_id_pairs, tokenized_sources[step], tokenized_targets[step])
