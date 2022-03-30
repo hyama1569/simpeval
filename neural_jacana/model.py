@@ -5,7 +5,7 @@ from transformers import BertModel
 from torch import logsumexp
 import torch.nn.functional as F
 from torch.autograd import Variable
-from utils import *
+from neural_jacana.utils import *
 
 class LayerNorm(nn.Module):
 	def __init__(self, features, eps=1e-6):
@@ -24,7 +24,7 @@ class NeuralWordAligner(nn.Module):
 		super(NeuralWordAligner, self).__init__()
 		self.args = args
 		self.my_device = torch.device('cpu')
-		self.bert_model = BertModel.from_pretrained('./spanbert_hf_base', output_hidden_states=True, output_attentions=True)
+		self.bert_model = BertModel.from_pretrained('neural_jacana/spanbert_hf_base', output_hidden_states=True, output_attentions=True)
 		self.attn_proj = nn.Linear(768, 100)
 		self.attn_embd = nn.Embedding(1, 100)
 		self.default_tag = -1
