@@ -31,7 +31,7 @@ def merge_sent2_ids(allign_id_pairs):
         if pair[0] not in keys_flatten:
             merged_sent2_allign_id_pairs.append(([pair[0]], [pair[1]]))
         else:
-            ind_addval = [i for i in range(len(keys)) if pair[0] in keys[i][0]]
+            ind_addval = [i for i in range(len(keys)) if pair[0] in keys[i]][0]
             merged_sent2_allign_id_pairs[ind_addval][1].append(pair[1])
     return merged_sent2_allign_id_pairs
 
@@ -67,7 +67,7 @@ def ids_to_words(merged_sent1_allign_id_pairs, tokenized_sent1, tokenized_sent2)
     for pair in merged_sent1_allign_id_pairs:
         sent1_words = [tokenized_sent1[i] for i in pair[0]]
         sent2_words = [tokenized_sent2[i] for i in pair[1]]
-        allign_id_pairs.append((sent1_words, sent2_words))
+        allign_word_pairs.append((sent1_words, sent2_words))
     return allign_word_pairs
 
 if __name__ == "__main__":
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     data = []
     example = namedtuple('example', 'ID, text_a, text_b, label')
     for i, (tokenized_source, tokenized_target) in enumerate(zip(tokenized_sources, tokenized_targets)):
-        data.append(example(i, ' '.join(source), ' '.join(target), '0-0'))
+        data.append(example(i, ' '.join(tokenized_source), ' '.join(tokenized_target), '0-0'))
     test_dataloader = create_Data_Loader(data_examples=data, args=args, set_type='test', batchsize=1, max_seq_length=128, tokenizer=tokenizer)
 
     for step, batch in enumerate(test_dataloader):
