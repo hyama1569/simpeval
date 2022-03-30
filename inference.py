@@ -108,8 +108,8 @@ if __name__ == "__main__":
 
     data = []
     example = namedtuple('example', 'ID, text_a, text_b, label')
-    for i, (source, target) in enumerate(zip(sources, targets)):
-        data.append(example(i, source, target, '0-0'))
+    for i, (tokenized_source, tokenized_target) in enumerate(zip(tokenized_sources, tokenized_targets)):
+        data.append(example(i, ' '.join(source), ' '.join(target), '0-0'))
     test_dataloader = create_Data_Loader(data_examples=data, args=args, set_type='test', batchsize=1, max_seq_length=128, tokenizer=tokenizer)
 
     for step, batch in enumerate(test_dataloader):
