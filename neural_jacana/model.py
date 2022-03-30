@@ -5,7 +5,7 @@ from transformers import BertModel
 from torch import logsumexp
 import torch.nn.functional as F
 from torch.autograd import Variable
-from .utils import *
+from utils import *
 
 class LayerNorm(nn.Module):
 	def __init__(self, features, eps=1e-6):
