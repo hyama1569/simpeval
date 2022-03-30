@@ -6,7 +6,7 @@ import torch
 import numpy as np
 import re
 import nltk
-from .neural_jacana.model import *
+from neural_jacana.model import *
 
 def preprocess_texts(texts):
     tokenized_texts = []
