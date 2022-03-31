@@ -48,19 +48,29 @@ def merge_sent1_ids(merged_sent2_allign_id_pairs):
             dup_inds.append(dup_ind)
     dup_inds = get_unique_list(dup_inds)
 
-    pair_to_add = []
-    for i in range(len(merged_sent2_allign_id_pairs)):
-        for j in range(len(dup_inds)):
-            if merged_sent2_allign_id_pairs[i][0][0] in dup_inds[j]:
-                pair_to_add.append((dup_inds[j], merged_sent2_allign_id_pairs[i][1]))
-    pair_to_add = get_unique_list(pair_to_add)
+    if len(dup_inds) != 0: #if there are duplicate values in merged_sent2_allign_id_pairs, they should be merged.
+        keys_to_add = []
+        for i in range(len(dup_inds)):
+            key_to_add = []
+            for j in range(len(merged_sent2_allign_id_pairs)):
+                if j in dup_inds[i]:
+                    key_to_add.append(merged_sent2_allign_id_pairs[j][0][0])
+            if len(key_to_add) != 0:
+                keys_to_add.append(keys_to_add)
+        
+        pairs_to_add = []
+        for i in range(len(dup_inds)):
+            pairs_to_add.append((keys_to_add[i], merged_sent2_allign_id_pairs[dup_inds[i][0]][1]))
 
-    dup_inds_flatten = [x for row in dup_inds for x in row]
-    for i in range(len(merged_sent2_allign_id_pairs)):
-        if i not in dup_inds_flatten:
-            merged_sent1_allign_id_pairs.append(merged_sent2_allign_id_pairs[i])
-    merged_sent1_allign_id_pairs.extend(pair_to_add)
-    return merged_sent1_allign_id_pairs
+        dup_inds_flatten = [x for row in dup_inds for x in row]
+        for i in range(len(merged_sent2_allign_id_pairs)):
+            if i not in dup_inds_flatten:
+                merged_sent1_allign_id_pairs.append(merged_sent2_allign_id_pairs[i])
+        merged_sent1_allign_id_pairs.extend(pairs_to_add)
+        return merged_sent1_allign_id_pairs
+    
+    else:
+        return merged_sent2_allign_id_pairs
 
 def ids_to_words(merged_sent1_allign_id_pairs, tokenized_sent1, tokenized_sent2):
     allign_word_pairs = []
