@@ -56,7 +56,7 @@ def merge_sent1_ids(merged_sent2_allign_id_pairs):
                 if j in dup_inds[i]:
                     key_to_add.append(merged_sent2_allign_id_pairs[j][0][0])
             if len(key_to_add) != 0:
-                keys_to_add.append(keys_to_add)
+                keys_to_add.append(key_to_add)
         
         pairs_to_add = []
         for i in range(len(dup_inds)):
