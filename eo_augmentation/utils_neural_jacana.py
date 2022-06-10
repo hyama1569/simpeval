@@ -6,12 +6,37 @@ import torch
 import numpy as np
 import re
 import nltk
+import pickle
+import tqdm
 from neural_jacana.model import *
+
+class data_example:
+    def __init__(self, ID, text_a, text_b, label):
+        self.ID = ID
+        self.text_a = text_a
+        self.text_b = text_b
+        self.label = label
+
+def normalize_1d_tensor_to_list(tensor):
+    nom_list = []
+    for i in range(len(tensor)):
+        val = tensor[i]
+        if 0 <= val <= 127:
+            nom_list.append(val)
+        elif val < 0:
+            nom_list.append(0)
+        elif 127 < val:
+            nom_list.append(127)
+            
+    return nom_list
 
 def preprocess_texts(texts):
     tokenized_texts = []
     for text in texts:
-        tokenized_texts.append(nltk.word_tokenize(re.sub(r'[\(\)\`\'\"]', '', text)))
+        text = re.sub(r'[\(\)\`\'\"\:\;]', '', text)
+        text = re.sub(r'-RRB-', '', text)
+        text = re.sub(r'-LRB-', '', text)
+        tokenized_texts.append(nltk.word_tokenize(text))
     return tokenized_texts
 
 def get_unique_list(seq):
@@ -132,8 +157,7 @@ def ids_to_words(merged_id_pairs, tokenized_sent1, tokenized_sent2):
         sent2_words = [tokenized_sent2[i] for i in pair[1]]
         align_word_pairs.append((sent1_words, sent2_words))
     return align_word_pairs
-
-
+    
 def prepare_model(args):
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -149,23 +173,29 @@ def prepare_model(args):
     model.eval()
     return model
 
-def get_alignment(model, args, sources, targets):
-    my_device = torch.device('cpu')
-
+def get_dataloader(sources, targets, args):
     tokenizer = BertTokenizer.from_pretrained('bert-base-cased')
     nltk.download('punkt')
     tokenized_sources = preprocess_texts(sources)
     tokenized_targets = preprocess_texts(targets)
     data = []
-    example = namedtuple('example', 'ID, text_a, text_b, label')
     for i, (tokenized_source, tokenized_target) in enumerate(zip(tokenized_sources, tokenized_targets)):
-        data.append(example(i, ' '.join(tokenized_source), ' '.join(tokenized_target), '0-0'))
+        data.append(data_example(i, ' '.join(tokenized_source), ' '.join(tokenized_target), '0-0'))
     test_dataloader = create_Data_Loader(data_examples=data, args=args, set_type='test', batchsize=1, max_seq_length=128, tokenizer=tokenizer)
+    with open('./src/test_dataloader.pickle', 'wb') as f:
+        pickle.dump(test_dataloader, f)
+    return test_dataloader
+
+def get_alignment(model, args, sources, targets):
+    my_device = torch.device('cpu')
+    test_dataloader = get_dataloader(sources, targets, args)
 
     aligns_list = []
-    for step, batch in enumerate(test_dataloader):
+    for step, batch in tqdm.tqdm(enumerate(test_dataloader)):
         batch = tuple(t.to(my_device) for t in batch)
         input_ids_a_and_b, input_ids_b_and_a, input_mask, segment_ids_a_and_b, segment_ids_b_and_a, sent1_valid_ids, sent2_valid_ids, sent1_wordpiece_length, sent2_wordpiece_length = batch
+        sent1_valid_ids = torch.tensor([normalize_1d_tensor_to_list(sent1_valid_ids[0])])
+        sent2_valid_ids = torch.tensor([normalize_1d_tensor_to_list(sent2_valid_ids[0])])
         with torch.no_grad():
             decoded_results = model(input_ids_a_and_b=input_ids_a_and_b, input_ids_b_and_a=input_ids_b_and_a,
                                         attention_mask=input_mask, token_type_ids_a_and_b=segment_ids_a_and_b,
