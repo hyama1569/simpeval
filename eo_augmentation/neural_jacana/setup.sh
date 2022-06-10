@@ -2,6 +2,9 @@
 
 #requirements install
 pip install transformers==3.0.2
+pip install -U pip setuptools wheel
+pip install -U spacy
+python -m spacy download en_core_web_sm
 
 #download spanbert pretrained model
 cd ./spanbert_hf_base
