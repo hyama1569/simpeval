@@ -17,19 +17,6 @@ class data_example:
         self.text_b = text_b
         self.label = label
 
-def normalize_1d_tensor_to_list(tensor):
-    nom_list = []
-    for i in range(len(tensor)):
-        val = tensor[i]
-        if 0 <= val <= 127:
-            nom_list.append(val)
-        elif val < 0:
-            nom_list.append(0)
-        elif 127 < val:
-            nom_list.append(127)
-            
-    return nom_list
-
 def preprocess_texts(texts):
     tokenized_texts = []
     for text in texts:
@@ -165,7 +152,8 @@ def prepare_model(args):
 
     #tokenizer = BertTokenizer.from_pretrained('bert-base-cased')
     model = NeuralWordAligner(args)
-    my_device = torch.device('cpu')
+    #my_device = torch.device('cpu')
+    my_device = args.my_device
     model = model.to(my_device)
 
     checkpoint = torch.load('./neural_jacana/Checkpoint_sure_and_possible_True_dataset_mtref_batchsize_1_max_span_size_4_use_transition_layer_False_epoch_2_0.9150.pt', map_location=my_device)
@@ -181,21 +169,22 @@ def get_dataloader(sources, targets, args):
     data = []
     for i, (tokenized_source, tokenized_target) in enumerate(zip(tokenized_sources, tokenized_targets)):
         data.append(data_example(i, ' '.join(tokenized_source), ' '.join(tokenized_target), '0-0'))
-    test_dataloader = create_Data_Loader(data_examples=data, args=args, set_type='test', batchsize=1, max_seq_length=128, tokenizer=tokenizer)
+    test_dataloader = create_Data_Loader(data_examples=data, args=args, set_type='test', batchsize=args.batch_size, max_seq_length=128, tokenizer=tokenizer)
     with open('./src/test_dataloader.pickle', 'wb') as f:
         pickle.dump(test_dataloader, f)
     return test_dataloader
 
 def get_alignment(model, args, sources, targets):
-    my_device = torch.device('cpu')
+    #my_device = torch.device('cpu')
+    my_device = args.my_device
     test_dataloader = get_dataloader(sources, targets, args)
 
     aligns_list = []
     for step, batch in tqdm.tqdm(enumerate(test_dataloader)):
         batch = tuple(t.to(my_device) for t in batch)
         input_ids_a_and_b, input_ids_b_and_a, input_mask, segment_ids_a_and_b, segment_ids_b_and_a, sent1_valid_ids, sent2_valid_ids, sent1_wordpiece_length, sent2_wordpiece_length = batch
-        sent1_valid_ids = torch.tensor([normalize_1d_tensor_to_list(sent1_valid_ids[0])])
-        sent2_valid_ids = torch.tensor([normalize_1d_tensor_to_list(sent2_valid_ids[0])])
+        sent1_valid_ids = torch.tensor([normalize_1d_tensor_to_list(sent1_valid_ids[0])]).to(my_device)
+        sent2_valid_ids = torch.tensor([normalize_1d_tensor_to_list(sent2_valid_ids[0])]).to(my_device)
         with torch.no_grad():
             decoded_results = model(input_ids_a_and_b=input_ids_a_and_b, input_ids_b_and_a=input_ids_b_and_a,
                                         attention_mask=input_mask, token_type_ids_a_and_b=segment_ids_a_and_b,
