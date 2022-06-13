@@ -8,7 +8,7 @@ def reverse_orig_simp(orig_sents, simp_sents):
     return df_rev
 
 if __name__ == '__main__':
-    with open('./src/wiki-auto-part-1-data.json?dl=0', 'r') as f:
+    with open('./wiki-auto-part-1-data.json?dl=0', 'r') as f:
         json_dict = json.load(f)
 
     sources = []
@@ -22,15 +22,25 @@ if __name__ == '__main__':
             sources.append(v['normal']['content'][norm_key])
             targets.append(v['simple']['content'][simp_key])
 
-    with open('./src/wikiauto_sources.pickle', 'wb') as f:
+    with open('./wikiauto_sources.pickle', 'wb') as f:
         pickle.dump(sources, f)
-    with open('./src/wikiauto_targets.pickle', 'wb') as f:
+    with open('./wikiauto_targets.pickle', 'wb') as f:
         pickle.dump(targets, f)
 
-    df = pd.DataFrame({'original':sources, 'simple':targets})
+    sources_deldup = []
+    targets_deldup = []
+
+    for i in range(len(sources)):
+        if sources[i] == targets[i]:
+            continue
+        else:
+            sources_deldup.append(sources[i])
+            targets_deldup.append(targets[i])
+
+    df = pd.DataFrame({'original':sources_deldup, 'simple':targets_deldup})
     df['label'] = 1
-    df_rev = reverse_orig_simp(sources, targets)
+    df_rev = reverse_orig_simp(sources_deldup, targets_deldup)
     data = pd.concat([df, df_rev], axis=0).reset_index()
 
-    with open('./src/wikiauto_dataframe.pickle', 'wb') as f:
+    with open('./wikiauto_dataframe.pickle', 'wb') as f:
         pickle.dump(data, f)

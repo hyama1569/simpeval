@@ -1,0 +1,22 @@
+wandb:
+  project: wikiauto
+  exp_num: 1
+  tags: [bert]
+path:
+  data_file_name: /workspace/simpeval/finetune/wikiauto/data/wikiauto_dataframe.pickle
+  checkpoint_path: checkpoints
+model:
+  n_classes: 9
+  max_token_len: 512
+training:
+  test_size: 0.3
+  valid_size: 0.3
+  n_epochs: 10
+  batch_size: 64
+  learning_rate: 0.01
+  orig_column_name: original
+  simp_column_name: simple
+  label_column_name: label
+callbacks:
+  patience: 5
+  patience_min_delta: 0
