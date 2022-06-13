@@ -8,7 +8,7 @@ def reverse_orig_simp(orig_sents, simp_sents):
     return df_rev
 
 if __name__ == '__main__':
-    with open('./wiki-auto-part-1-data.json?dl=0', 'r') as f:
+    with open('../../data/wiki-auto-part-1-data.json?dl=0', 'r') as f:
         json_dict = json.load(f)
 
     sources = []
