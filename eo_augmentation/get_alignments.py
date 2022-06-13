@@ -26,5 +26,5 @@ if __name__ == '__main__':
 
     model = prepare_model(args)
     aligns = get_alignment(model, args, sources, targets)
-    with open('./src/aligns_wikiaoto.pickle', 'wb') as f:
+    with open('./src/aligns_wikiauto.pickle', 'wb') as f:
                 pickle.dump(aligns, f)
