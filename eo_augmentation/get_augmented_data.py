@@ -22,4 +22,4 @@ if __name__ == '__main__':
     max_cnt = 10
     applied_sentences_all = apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt)
     with open('./src/augmented_wikiauto.pickle', 'wb') as f:
-                pickle.dump(applied_sentences_all, f)
+        pickle.dump(applied_sentences_all, f)
