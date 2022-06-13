@@ -19,7 +19,7 @@ from transformers import BertModel, BertTokenizer
 class CreateDataset(Dataset):
     def __init__(
         self, 
-        data: pd.Dataframe, 
+        data: pd.DataFrame, 
         tokenizer: BertTokenizer, 
         max_token_len: int,
         orig_column_name: str,
@@ -224,7 +224,7 @@ def main(cfg: DictConfig):
     #df = pd.read_csv(cfg.path.data_file_name, sep="\t").dropna().reset_index(drop=True)
     #df[cfg.training.label_column_name] = np.argmax(df.iloc[:, 2:].values, axis=1)
     #df[[cfg.training.text_column_name, cfg.training.label_column_name]]
-    data = pd.read_pickle('../../data/wikiauto_dataframe.pickle')
+    data = pd.read_pickle(cfg.path.data_file_name)
     #train_df, test_df = train_test_split(data, test_size=0.2, random_state=0)
     #train_df, valid_df = train_test_split(train_df, test_size=0.2, random_state=0)
     #data_module = CreateDataModule(train_df=train_df, valid_df=valid_df, test_df=test_df)
@@ -249,8 +249,8 @@ def main(cfg: DictConfig):
     )
     trainer = pl.Trainer(
         max_epochs=cfg.training.n_epochs,
-        gpus='0',
-        progress_bar_refresh_rate=30,
+        gpus=1,
+        #progress_bar_refresh_rate=30,
         callbacks=call_backs,
         logger=wandb_logger,
     )
