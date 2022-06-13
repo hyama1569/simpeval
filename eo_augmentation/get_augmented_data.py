@@ -13,7 +13,8 @@ if __name__ == '__main__':
         targets = pickle.load(f)
     with open('./src/aligns_wikiauto.pickle', 'rb') as f:
         aligns = pickle.load(f)
-
+        
+    nltk.download('punkt')
     sent1_toks = preprocess_texts(sources)
     sent2_toks = preprocess_texts(targets)
     nlp = spacy.load('en_core_web_sm')
