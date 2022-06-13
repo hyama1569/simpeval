@@ -7,6 +7,19 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 from neural_jacana.utils import *
 
+def normalize_1d_tensor_to_list(tensor):
+    nom_list = []
+    for i in range(len(tensor)):
+        val = tensor[i]
+        if 0 <= val <= 127:
+            nom_list.append(val)
+        elif val < 0:
+            nom_list.append(0)
+        elif 127 < val:
+            nom_list.append(127)
+            
+    return nom_list
+
 class LayerNorm(nn.Module):
 	def __init__(self, features, eps=1e-6):
 		super().__init__()
@@ -23,7 +36,8 @@ class NeuralWordAligner(nn.Module):
 	def __init__(self, args):
 		super(NeuralWordAligner, self).__init__()
 		self.args = args
-		self.my_device = torch.device('cpu')
+		#self.my_device = torch.device('cpu')
+		self.my_device = args.my_device
 		self.bert_model = BertModel.from_pretrained('neural_jacana/spanbert_hf_base', output_hidden_states=True, output_attentions=True)
 		self.attn_proj = nn.Linear(768, 100)
 		self.attn_embd = nn.Embedding(1, 100)
