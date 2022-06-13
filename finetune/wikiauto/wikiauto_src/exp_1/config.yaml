@@ -6,7 +6,7 @@ path:
   data_file_name: /workspace/simpeval/finetune/wikiauto/data/wikiauto_dataframe.pickle
   checkpoint_path: checkpoints
 model:
-  n_classes: 9
+  n_classes: 2
   max_token_len: 512
 training:
   test_size: 0.3
