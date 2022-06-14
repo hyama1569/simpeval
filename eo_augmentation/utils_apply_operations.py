@@ -47,7 +47,7 @@ def get_edit_sequences(sent1_toks, sent2_toks, aligns):
         edit_sequences.append(edit_sequence)
     return edit_sequences
 
-def apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt=10):
+def apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt):
     random.seed(111)
     applied_sentences_all = []
 
@@ -129,4 +129,4 @@ def apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt=10
             applied_sentences_all.append(applied_sentences)
         else:
             applied_sentences_all.append([])
-        
+    return applied_sentences_all    
