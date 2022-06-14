@@ -174,6 +174,19 @@ class BertClassifier(pl.LightningModule):
         return {'loss': loss,
                 'batch_preds': preds,
                 'batch_labels': batch["labels"]}
+    
+    def training_epoch_end(self, outputs, mode="train):
+        epoch_preds = torch.cat([x['batch_preds'] for x in outputs])
+        epoch_labels = torch.cat([x['batch_labels'] for x in outputs])
+        epoch_loss = self.criterion(epoch_preds, epoch_labels)
+        self.log(f"{mode}_loss", epoch_loss, logger=True)
+
+        num_correct = (epoch_preds.argmax(dim=1) == epoch_labels).sum().item()
+        epoch_accuracy = num_correct / len(epoch_labels)
+        self.log(f"{mode}_accuracy", epoch_accuracy, logger=True)
+        
+        epoch_auroc = auroc(epoch_preds, epoch_labels, num_classes=self.n_classes)
+        self.log(f"{mode}_auroc", epoch_auroc)                   
 
     def validation_epoch_end(self, outputs, mode="val"):
         epoch_preds = torch.cat([x['batch_preds'] for x in outputs])
@@ -184,6 +197,9 @@ class BertClassifier(pl.LightningModule):
         num_correct = (epoch_preds.argmax(dim=1) == epoch_labels).sum().item()
         epoch_accuracy = num_correct / len(epoch_labels)
         self.log(f"{mode}_accuracy", epoch_accuracy, logger=True)
+                           
+        epoch_auroc = auroc(epoch_preds, epoch_labels, num_classes=self.n_classes)
+        self.log(f"{mode}_auroc", epoch_auroc)                   
 
     def test_epoch_end(self, outputs):
         return self.validation_epoch_end(outputs, "test")
