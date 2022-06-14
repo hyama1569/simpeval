@@ -271,7 +271,10 @@ def main(cfg: DictConfig):
         logger=wandb_logger,
     )
     trainer.fit(model, data_module)
-
+                           
+    data_module.setup(stage='test')                       
+    results = trainer.test(ckpt_path=callbacks[1].best_model_path, datamodule=data_module)                      
+    print(results)
 
 if __name__ == "__main__":
     main()
