@@ -23,6 +23,9 @@ def preprocess_texts(texts):
         text = re.sub(r'[\(\)\`\'\"\:\;]', '', text)
         text = re.sub(r'-RRB-', '', text)
         text = re.sub(r'-LRB-', '', text)
+        text = re.sub(r'DEL', 'del', text)
+        text = re.sub(r'KEEP', 'keep', text)
+        text = re.sub(r'ADD', 'add', text)
         tokenized_texts.append(nltk.word_tokenize(text))
     return tokenized_texts
 
