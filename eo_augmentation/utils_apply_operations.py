@@ -64,7 +64,7 @@ def apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt):
         if len(edit_sequence) > 1:
             applied_sentences = []
             apply_sequences = []
-            limit = 10
+            limit = max_cnt
             now_cnt = 0
             while limit != 0:
                 if now_cnt == 2**(len(edit_sequence)) - 2:
