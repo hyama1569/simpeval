@@ -273,7 +273,7 @@ def main(cfg: DictConfig):
     trainer.fit(model, data_module)
                            
     data_module.setup(stage='test')                       
-    results = trainer.test(ckpt_path=callbacks[1].best_model_path, datamodule=data_module)                      
+    results = trainer.test(ckpt_path=call_backs[1].best_model_path, datamodule=data_module)                      
     print(results)
 
 if __name__ == "__main__":
