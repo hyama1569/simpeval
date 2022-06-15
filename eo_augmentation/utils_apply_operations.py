@@ -64,9 +64,9 @@ def apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt):
         if len(edit_sequence) > 1:
             applied_sentences = []
             apply_sequences = []
-            #max_cnt = 10
+            limit = 10
             now_cnt = 0
-            while max_cnt != 0:
+            while limit != 0:
                 if now_cnt == 2**(len(edit_sequence)) - 2:
                     break
                 rn = random.randint(1, len(edit_sequence)-1)
@@ -75,7 +75,7 @@ def apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt):
                 if set(apply_sequence) not in apply_sequences:
                     apply_sequences.append(set(apply_sequence))
                     now_cnt += 1
-                    max_cnt -= 1
+                    limit -= 1
 
                     apply_ad_spans = []
                     apply_d_spans = []
