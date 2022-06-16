@@ -186,6 +186,7 @@ class BertRanker(pl.LightningModule):
     def forward(self, input_ids, attention_mask):
         output = self.bert(input_ids, attention_mask=attention_mask)
         preds = self.classifier(output.pooler_output)
+        preds = torch.flatten(preds)
         return preds, output
       
     def training_step(self, batch, batch_idx):
