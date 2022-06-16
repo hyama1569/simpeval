@@ -29,6 +29,3 @@ wget -P /workspace/simpeval/marginranking/wikiauto/data/ --load-cookies /tmp/coo
 
 #exec prepare_data.py
 python ../../data/prepare_data.py
-
-
-https://drive.google.com/file/d/1QLPDxLQBZsY0-zWoRrH7HHL4BedvfcMM/view?usp=sharing
