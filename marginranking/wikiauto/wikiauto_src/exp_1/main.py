@@ -294,7 +294,8 @@ def main(cfg: DictConfig):
     )
     trainer = pl.Trainer(
         max_epochs=cfg.training.n_epochs,
-        gpus=cfg.training.n_gpus,
+        devices=cfg.training.n_gpus,
+        accelerator="gpu",
         #progress_bar_refresh_rate=30,
         callbacks=call_backs,
         logger=wandb_logger,
