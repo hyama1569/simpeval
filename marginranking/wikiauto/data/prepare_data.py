@@ -124,7 +124,7 @@ class BertClassifier(pl.LightningModule):
     def __init__(
         self, 
         n_classes: int, 
-        learning_rate: float,
+        learning_rate: float = None,
         pretrained_model='bert-base-uncased',
     ):
         super().__init__()
@@ -181,7 +181,7 @@ def random_sample_augmented_data(
     random_sampled_df = pd.DataFrame({'original':sampled_sources, 'simple':sampled_targets, 'case_number':sampled_case_nums, 'label':dummy_labels})
     return random_sampled_df
 
-@hydra.main(config_path=".", config_name="config")
+@hydra.main(config_path="../../data", config_name="config")
 def main(cfg: DictConfig):
     with open(str(cfg.path.aug_data), 'rb') as f:
         aug_data = json.load(f)
@@ -194,14 +194,14 @@ def main(cfg: DictConfig):
     random.seed(cfg.dataprep.random_seed)
 
     random_sampled_df = random_sample_augmented_data(sources, targets, aug_data, n_samples)
-    with open(str(cfg.path.random_sampled_data)) as f:
+    with open(str(cfg.path.random_sampled_data), 'wb') as f:
         pickle.dump(random_sampled_df, f)
 
     data_module = CreateDataModule(cfg.dataprep.batch_size, cfg.dataprep.max_token_len, test_df=random_sampled_df)
     data_module.setup(stage='test')
     test_dataloader = data_module.test_dataloader()
     model = BertClassifier.load_from_checkpoint(n_classes=2, checkpoint_path=str(cfg.path.finetuned))
-    model = nn.DataParallel(model, device_ids=[2,3])
+    #model = nn.DataParallel(model, device_ids=[2,3])
     device = 'cuda'
     model.to(device)
 
