@@ -25,7 +25,7 @@ wget -P /workspace/simpeval/marginranking/wikiauto/data/ --load-cookies /tmp/coo
 wget -P /workspace/simpeval/marginranking/wikiauto/data/ --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1Lytj61Rso_kR8jAU8YtT0-136hmSLCYM' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1Lytj61Rso_kR8jAU8YtT0-136hmSLCYM" -O epoch=9.ckpt && rm -rf /tmp/cookies.txt
 
 #random sampled data
-wget -P /workspace/simpeval/marginranking/wikiauto/data/ --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1QLPDxLQBZsY0-zWoRrH7HHL4BedvfcMM' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1QLPDxLQBZsY0-zWoRrH7HHL4BedvfcMM" -O augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1 && rm -rf /tmp/cookies.txt
+wget -P /workspace/simpeval/marginranking/wikiauto/data/ --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1QLPDxLQBZsY0-zWoRrH7HHL4BedvfcMM' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1QLPDxLQBZsY0-zWoRrH7HHL4BedvfcMM" -O augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle && rm -rf /tmp/cookies.txt
 
 #exec prepare_data.py
 python ../../data/prepare_data.py
