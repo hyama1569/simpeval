@@ -181,10 +181,10 @@ def random_sample_augmented_data(
     random_sampled_df = pd.DataFrame({'original':sampled_sources, 'simple':sampled_targets, 'case_number':sampled_case_nums, 'label':dummy_labels})
     return random_sampled_df
 
-@hydra.main(config_path="../../data", config_name="config")
+@hydra.main(config_path="../wikiauto_src/exp_1", config_name="config")
 def main(cfg: DictConfig):
     with open(str(cfg.path.aug_data), 'rb') as f:
-        aug_data = json.load(f)
+        aug_data = pickle.load(f)
     with open(str(cfg.path.sources), 'rb') as f:
         sources = pickle.load(f)
     with open(str(cfg.path.targets), 'rb') as f:
