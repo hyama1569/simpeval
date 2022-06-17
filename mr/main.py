@@ -185,10 +185,10 @@ class BertRanker(pl.LightningModule):
                 nn.Dropout(p=dropout_rate),
             )
             for i in range(n_linears-1):
-                classifier.add_module('fc', nn.Linear(d_hidden_linear, d_hidden_linear))
-                classifier.add_module('activate', nn.Sigmoid())
-                classifier.add_module('dropout', nn.Dropout(p=dropout_rate))
-            classifier.add_module(nn.Linear(d_hidden_linear, n_classes))
+                classifier.add_module('fc_{}'.format(i), nn.Linear(d_hidden_linear, d_hidden_linear))
+                classifier.add_module('activate_{}'.format(i), nn.Sigmoid())
+                classifier.add_module('dropout_{}'.format(i), nn.Dropout(p=dropout_rate))
+            classifier.add_module('fc_last', nn.Linear(d_hidden_linear, n_classes))
             self.classifier = classifier
         
         self.lr = learning_rate
