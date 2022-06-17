@@ -124,12 +124,29 @@ class BertClassifier(pl.LightningModule):
     def __init__(
         self, 
         n_classes: int, 
-        learning_rate: float = None,
+        n_linears: int,
+        d_hidden_linear: int,
+        dropout_rate: float,
+        learning_rate: float=None,
         pretrained_model='bert-base-uncased',
     ):
         super().__init__()
         self.bert = BertModel.from_pretrained(pretrained_model, output_hidden_states=True, return_dict=True)
-        self.classifier = nn.Linear(self.bert.config.hidden_size, n_classes)
+        #self.classifier = nn.Linear(self.bert.config.hidden_size, n_classes)
+        if n_linears == 1:
+            self.classifier = nn.Linear(self.bert.config.hidden_size, n_classes)
+        else:
+            classifier = nn.Sequential(
+            nn.Linear(self.bert.config.hidden_size, d_hidden_linear),
+            nn.Sigmoid(),
+            nn.Dropout(p=dropout_rate)
+        )
+        for i in range(n_linears-1):
+            classifier.add_module(nn.Linear(d_hidden_linear, d_hidden_linear))
+            classifier.add_module(nn.Sigmoid())
+            classifier.add_module(nn.Dropout(p=dropout_rate))
+            classifier.add_module(nn.Linear(d_hidden_linear, n_classes))
+        self.classifier = classifier
         self.lr = learning_rate
         self.criterion = nn.CrossEntropyLoss()
         self.n_classes = n_classes
@@ -200,7 +217,13 @@ def main(cfg: DictConfig):
     data_module = CreateDataModule(cfg.dataprep.batch_size, cfg.dataprep.max_token_len, test_df=random_sampled_df)
     data_module.setup(stage='test')
     test_dataloader = data_module.test_dataloader()
-    model = BertClassifier.load_from_checkpoint(n_classes=2, checkpoint_path=str(cfg.path.finetuned))
+    model = BertClassifier.load_from_checkpoint(
+        n_classes=2,
+        n_linears=cfg.dataprep.n_linears, 
+        d_hidden_linear=cfg.dataprep.d_hidden_linear, 
+        dropout_rate=cfg.dataprep.dropout_rate,
+        checkpoint_path=str(cfg.path.finetuned),
+    )
     #model = nn.DataParallel(model, device_ids=[2,3])
     device = 'cuda'
     model.to(device)

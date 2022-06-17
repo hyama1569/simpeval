@@ -64,11 +64,11 @@ class CreateDataset(Dataset):
 class CreateDataModule(pl.LightningDataModule):
     def __init__(
         self,
-        train_df: pd.DataFrame, 
-        valid_df: pd.DataFrame, 
-        test_df: pd.DataFrame, 
         batch_size: int, 
         max_token_len: int, 
+        train_df: pd.DataFrame=None, 
+        valid_df: pd.DataFrame=None, 
+        test_df: pd.DataFrame=None, 
         orig_column_name: str = 'original',
         simp_column_name: str = 'simple',
         label_column_name: str = 'label',
@@ -126,12 +126,29 @@ class BertClassifier(pl.LightningModule):
     def __init__(
         self, 
         n_classes: int, 
-        learning_rate: float,
+        n_linears: int,
+        d_hidden_linear: int,
+        dropout_rate: float,
+        learning_rate: float=None,
         pretrained_model='bert-base-uncased',
     ):
         super().__init__()
         self.bert = BertModel.from_pretrained(pretrained_model, output_hidden_states=True, return_dict=True)
-        self.classifier = nn.Linear(self.bert.config.hidden_size, n_classes)
+        #self.classifier = nn.Linear(self.bert.config.hidden_size, n_classes)
+        if n_linears == 1:
+            self.classifier = nn.Linear(self.bert.config.hidden_size, n_classes)
+        else:
+            classifier = nn.Sequential(
+                nn.Linear(self.bert.config.hidden_size, d_hidden_linear),
+                nn.Sigmoid(),
+                nn.Dropout(p=dropout_rate)
+            )
+            for i in range(n_linears-1):
+                classifier.add_module(nn.Linear(d_hidden_linear, d_hidden_linear))
+                classifier.add_module(nn.Sigmoid())
+                classifier.add_module(nn.Dropout(p=dropout_rate))
+                classifier.add_module(nn.Linear(d_hidden_linear, n_classes))
+            self.classifier = classifier
         self.lr = learning_rate
         self.criterion = nn.CrossEntropyLoss()
         self.n_classes = n_classes

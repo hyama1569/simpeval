@@ -33,6 +33,9 @@ dataprep:
   random_seed: 0
   batch_size: 64
   max_token_len: 512
+  n_linears: 1
+  d_hidden_linear: 128
+  dropout_rate: 0.2
 
 
 callbacks:
