@@ -278,6 +278,9 @@ def main(cfg: DictConfig):
     )
     model = BertClassifier(
         n_classes=cfg.model.n_classes,
+        n_linears=cfg.model.n_linears,
+        d_hidden_linear=cfg.model.d_hidden_linear,
+        dropout_rate=cfg.model.dropout_rate,
         learning_rate=cfg.training.learning_rate,
     )
     trainer = pl.Trainer(
