@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
 from transformers import BertModel, BertTokenizer
 
-data_file_name='/workspace/simpeval/marginranking/wikiauto/data/augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle'
+data_file_name='.augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle'
 n_classes=1
 n_linears=1
 d_hidden_linear=128
