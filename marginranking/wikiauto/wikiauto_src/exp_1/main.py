@@ -166,9 +166,10 @@ class BertRanker(pl.LightningModule):
                 nn.Dropout(p=dropout_rate),
             )
             for i in range(n_linears-1):
-                classifier.add_module(nn.Linear(d_hidden_linear, d_hidden_linear))
-                classifier.add_module(nn.Sigmoid())
-                classifier.add_module(nn.Dropout(p=dropout_rate))
+                classifier.add_module('fc', nn.Linear(d_hidden_linear, d_hidden_linear))
+                classifier.add_module('activate', nn.Sigmoid())
+                classifier.add_module('dropout', nn.Dropout(p=dropout_rate))
+            classifier.add_module('fc', nn.Linear(d_hidden_linear, n_classes))
             classifier.add_module(nn.Linear(d_hidden_linear, n_classes))
             self.classifier = classifier
         
@@ -275,11 +276,11 @@ def main(cfg: DictConfig):
     train, test = train_test_split(data, test_size=cfg.training.test_size, shuffle=True)
     train, valid = train_test_split(train, test_size=cfg.training.valid_size, shuffle=True)
     data_module = CreateDataModule(
-        train,
-        valid,
-        test,
-        cfg.training.batch_size,
-        cfg.model.max_token_len,
+        train_df=train,
+        valid_df=valid,
+        test_df=test,
+        batch_size=cfg.training.batch_size,
+        max_token_len=cfg.model.max_token_len,
     )
     data_module.setup(stage='fit')
 
