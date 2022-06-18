@@ -185,9 +185,15 @@ def random_sample_augmented_data(
             sampled_sources.append(sources[i])
             sampled_targets.append(targets[i])
             sampled_case_nums.append(case_num)
+            sampled_sources.append(targets[i])
+            sampled_targets.append(sources[i])
+            sampled_case_nums.append(case_num)
             paired_cands = []
-            for perm in itertools.permutations(aug_data[i], 2):
-                paired_cands.append([perm[0], perm[1]])
+            for perm in itertools.permutations(aug_data[i]+[sources[i], targets[i]], 2):
+                if (perm[0] == sources[i] and perm[1] == targets[i]) or (perm[0] == targets[i] and perm[1] == sources[i]):
+                    continue
+                else:
+                    paired_cands.append([perm[0], perm[1]])
         rs_paired_cands = random.sample(paired_cands, min(n_samples, len(paired_cands)))
         for i in range(len(rs_paired_cands)):
             sampled_sources.append(rs_paired_cands[i][0])
@@ -238,10 +244,15 @@ def main(cfg: DictConfig):
             attention_mask = attention_mask.to(device)
             loss, preds, output = model(input_ids, attention_mask)
             predicted_labels.append(preds)
-    predicted_labels = torch.cat([x for x in predicted_labels])
-    predicted_labels = [1 if pred == 1 else -1 for pred in predicted_labels.argmax(dim=1)]
 
-    random_sampled_df['label'] = predicted_labels
+    raw_predicted_labels = torch.cat([x for x in predicted_labels])
+    random_sampled_df['label'] = raw_predicted_labels
+    with open(cfg.path.raw_predicted_path, 'wb') as f:
+        pickle.dump(random_sampled_df, f)
+
+    argmaxed_predicted_labels = [1 if pred == 1 else -1 for pred in raw_predicted_labels.argmax(dim=1)]
+
+    random_sampled_df['label'] = argmaxed_predicted_labels
 
     with open(str(cfg.path.data_file_name), 'wb') as f:
         pickle.dump(random_sampled_df, f)
