@@ -14,7 +14,9 @@ from pytorch_lightning.loggers import WandbLogger
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
 from transformers import BertModel, BertTokenizer
+from pytorch_lightning.strategies.ddp import DDPStrategy
 
+checkpoint_path = './checkpoints/mr_1'
 data_file_name='.augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle'
 n_classes=1
 n_linears=1
@@ -303,7 +305,7 @@ def main():
     data_module.setup(stage='fit')
 
     call_backs = make_callbacks(
-        patience_min_delta, patience, '.'
+        patience_min_delta, patience, checkpoint_path
     )
     model = BertRanker(
         n_classes=n_classes,
@@ -318,6 +320,7 @@ def main():
         accelerator="gpu",
         #progress_bar_refresh_rate=30,
         callbacks=call_backs,
+        strategy=DDPStrategy(find_unused_parameters=False),
         deterministic=True
     )
     trainer.fit(model, data_module)
