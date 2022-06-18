@@ -17,7 +17,7 @@ from transformers import BertModel, BertTokenizer
 from pytorch_lightning.strategies.ddp import DDPStrategy
 
 checkpoint_path = './checkpoints/mr_1'
-data_file_name='.augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle'
+data_file_name='augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle'
 n_classes=1
 n_linears=1
 d_hidden_linear=128
