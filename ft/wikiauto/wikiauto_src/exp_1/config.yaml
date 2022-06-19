@@ -3,7 +3,7 @@ wandb:
   exp_num: 1
   tags: [bert]
 path:
-  data_file_name: /workspace/simpeval/finetune/wikiauto/data/wikiauto_dataframe.pickle
+  data_file_name: /workspace/simpeval/ft/wikiauto/data/wikiauto_dataframe.pickle
   checkpoint_path: checkpoints
 model:
   n_classes: 1
@@ -12,6 +12,7 @@ model:
   d_hidden_linear: 128
   dropout_rate: 0.3
 training:
+  n_gpys: 1
   test_size: 0.3
   valid_size: 0.3
   n_epochs: 10
