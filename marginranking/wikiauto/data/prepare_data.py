@@ -245,7 +245,7 @@ def main(cfg: DictConfig):
             loss, preds, output = model(input_ids, attention_mask)
             predicted_labels.append(preds)
 
-    raw_predicted_labels = torch.cat([x for x in predicted_labels])
+    raw_predicted_labels = torch.cat([x for x in predicted_labels]).to('cpu')
     random_sampled_df['label'] = raw_predicted_labels
     with open(cfg.path.raw_predicted_path, 'wb') as f:
         pickle.dump(random_sampled_df, f)
