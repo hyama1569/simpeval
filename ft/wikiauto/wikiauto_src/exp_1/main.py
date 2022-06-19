@@ -24,7 +24,7 @@ class AugmentedDataset(Dataset):
         max_token_len: int,
         orig_column_name: str,
         simp_column_name: str,
-        #label_column_name: str,
+        label_column_name: str,
         #case_num_column_name:str,
     ):
         self.data = data
@@ -32,7 +32,7 @@ class AugmentedDataset(Dataset):
         self.max_token_len = max_token_len
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
-        #self.label_column_name = label_column_name
+        self.label_column_name = label_column_name
         #self.case_num_column_name = case_num_column_name
 
     def __len__(self):
@@ -42,7 +42,7 @@ class AugmentedDataset(Dataset):
         data_row = self.data.iloc[index]
         origs = data_row[self.orig_column_name]
         simps = data_row[self.simp_column_name]
-        #labels = data_row[self.label_column_name]
+        labels = data_row[self.label_column_name]
         #case_nums = data_row[self.case_num_column_name]
 
         encoding_origs = self.tokenizer.encode_plus(
@@ -74,7 +74,7 @@ class AugmentedDataset(Dataset):
                 input_ids=encoding_simps["input_ids"].flatten(),
                 attention_mask=encoding_simps["attention_mask"].flatten(),
             ),
-            #labels=torch.tensor(labels),
+            labels=torch.tensor(labels),
             #case_nums=torch.tensor(case_nums)
         )
 
@@ -88,7 +88,7 @@ class CreateDataModule(pl.LightningDataModule):
         max_token_len: int, 
         orig_column_name: str = 'original',
         simp_column_name: str = 'simple',
-        #label_column_name: str = 'label',
+        label_column_name: str = 'label',
         #case_num_column_name: str = 'case_number',
         pretrained_model='bert-base-uncased',
     ):
@@ -100,7 +100,7 @@ class CreateDataModule(pl.LightningDataModule):
         self.max_token_len = max_token_len
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
-        #self.label_column_name = label_column_name
+        self.label_column_name = label_column_name
         #self.case_num_column_name = case_num_column_name
         self.tokenizer = BertTokenizer.from_pretrained(pretrained_model)
 
@@ -112,7 +112,7 @@ class CreateDataModule(pl.LightningDataModule):
               self.max_token_len,
               self.orig_column_name,
               self.simp_column_name,
-              #self.label_column_name,
+              self.label_column_name,
               #self.case_num_column_name,
             )
           self.vaild_dataset = AugmentedDataset(
@@ -121,7 +121,7 @@ class CreateDataModule(pl.LightningDataModule):
               self.max_token_len,
               self.orig_column_name,
               self.simp_column_name,
-              #self.label_column_name,
+              self.label_column_name,
               #self.case_num_column_name,
             )
         if stage == "test":
@@ -131,7 +131,7 @@ class CreateDataModule(pl.LightningDataModule):
               self.max_token_len,
               self.orig_column_name,
               self.simp_column_name,
-              #self.label_column_name,
+              self.label_column_name,
               #self.case_num_column_name,
             )
 
