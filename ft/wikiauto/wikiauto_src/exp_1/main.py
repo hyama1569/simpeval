@@ -272,6 +272,7 @@ def main(cfg: DictConfig):
     )
     wandb_logger.log_hyperparams(cfg)
     data = pd.read_pickle(cfg.path.data_file_name)
+    data.loc[data['label'] == 0, 'label'] = -1
     train, test = train_test_split(data, test_size=cfg.training.test_size, shuffle=True)
     train, valid = train_test_split(train, test_size=cfg.training.valid_size, shuffle=True)
     data_module = CreateDataModule(
