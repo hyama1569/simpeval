@@ -176,6 +176,10 @@ def random_sample_augmented_data(
     sampled_sources = []
     sampled_targets = []
     sampled_case_nums = []
+    sampled_labels = []
+    sampled_sources_unlabeled = []
+    sampled_targets_unlabeled = []
+    sampled_case_nums_unlabeled = []
     case_num = 0
     print("start random sampling data.")
     for i in tqdm.tqdm(range(len(aug_data))):
@@ -185,24 +189,40 @@ def random_sample_augmented_data(
             sampled_sources.append(sources[i])
             sampled_targets.append(targets[i])
             sampled_case_nums.append(case_num)
+            sampled_labels.append(1)
             sampled_sources.append(targets[i])
             sampled_targets.append(sources[i])
             sampled_case_nums.append(case_num)
+            sampled_labels.append(-1)
             paired_cands = []
             for perm in itertools.permutations(aug_data[i]+[sources[i], targets[i]], 2):
                 if (perm[0] == sources[i] and perm[1] == targets[i]) or (perm[0] == targets[i] and perm[1] == sources[i]):
                     continue
+                elif perm[0] == sources[i]:
+                    paired_cands.append([perm[0], perm[1], 1])
+                elif perm[1] == sources[i]:
+                    paired_cands.append([perm[0], perm[1], -1])
+                elif perm[0] == targets[i]:
+                    paired_cands.append([perm[0], perm[1], -1])
+                elif perm[1] == targets[i]:
+                    paired_cands.append([perm[0], perm[1], 1])
                 else:
-                    paired_cands.append([perm[0], perm[1]])
+                    paired_cands.append([perm[0], perm[1], -100]) #dummy label
         rs_paired_cands = random.sample(paired_cands, min(n_samples, len(paired_cands)))
         for i in range(len(rs_paired_cands)):
-            sampled_sources.append(rs_paired_cands[i][0])
-            sampled_targets.append(rs_paired_cands[i][1])
-            sampled_case_nums.append(case_num)
+            if rs_paired_cands[i][2] == 1 or rs_paired_cands[i][2] == -1:
+                sampled_sources.append(rs_paired_cands[i][0])
+                sampled_targets.append(rs_paired_cands[i][1])
+                sampled_case_nums.append(case_num)
+                sampled_labels.append(rs_paired_cands[i][2])
+            else:
+                sampled_sources_unlabeled.append(rs_paired_cands[i][0]) 
+                sampled_targets_unlabeled.append(rs_paired_cands[i][1])
+                sampled_case_nums_unlabeled.append(case_num)
         case_num += 1
-    dummy_labels = [-100 for i in range(len(sampled_sources))]
-    random_sampled_df = pd.DataFrame({'original':sampled_sources, 'simple':sampled_targets, 'case_number':sampled_case_nums, 'label':dummy_labels})
-    return random_sampled_df
+    random_sampled_df_labeled = pd.DataFrame({'original':sampled_sources, 'simple':sampled_targets, 'case_number':sampled_case_nums, 'label':sampled_labels})
+    random_sampled_df_unlabeled = pd.DataFrame({'original':sampled_sources_unlabeled, 'simple':sampled_targets_unlabeled, 'case_number':sampled_case_nums})
+    return random_sampled_df_labeled, random_sampled_df_unlabeled
 
 @hydra.main(config_path="../wikiauto_src/exp_1", config_name="config")
 def main(cfg: DictConfig):
@@ -216,11 +236,13 @@ def main(cfg: DictConfig):
     n_samples = cfg.dataprep.n_random_sample
     random.seed(cfg.dataprep.random_seed)
 
-    random_sampled_df = random_sample_augmented_data(sources, targets, aug_data, n_samples)
-    with open(str(cfg.path.random_sampled_data), 'wb') as f:
-        pickle.dump(random_sampled_df, f)
+    random_sampled_df_labeled, random_sampled_df_unlabeled = random_sample_augmented_data(sources, targets, aug_data, n_samples)
+    with open(str(cfg.path.random_sampled_data_labeled), 'wb') as f:
+        pickle.dump(random_sampled_df_labeled, f)
+    with open(str(cfg.path.random_sampled_data_unlabeled), 'wb') as f:
+        pickle.dump(random_sampled_df_unlabeled, f)
 
-    data_module = CreateDataModule(cfg.dataprep.batch_size, cfg.dataprep.max_token_len, test_df=random_sampled_df)
+    data_module = CreateDataModule(cfg.dataprep.batch_size, cfg.dataprep.max_token_len, test_df=random_sampled_df_unlabeled)
     data_module.setup(stage='test')
     test_dataloader = data_module.test_dataloader()
     model = BertClassifier.load_from_checkpoint(
@@ -246,16 +268,16 @@ def main(cfg: DictConfig):
             predicted_labels.append(preds)
 
     raw_predicted_labels = torch.cat([x for x in predicted_labels]).to('cpu')
-    random_sampled_df['label'] = raw_predicted_labels
+    random_sampled_df_unlabeled['label'] = raw_predicted_labels
     with open(cfg.path.raw_predicted_path, 'wb') as f:
-        pickle.dump(random_sampled_df, f)
+        pickle.dump(random_sampled_df_unlabeled, f)
 
-    argmaxed_predicted_labels = [1 if pred == 1 else -1 for pred in raw_predicted_labels.argmax(dim=1)]
+    #argmaxed_predicted_labels = [1 if pred == 1 else -1 for pred in raw_predicted_labels.argmax(dim=1)]
 
-    random_sampled_df['label'] = argmaxed_predicted_labels
+    #random_sampled_df_unlabeled['label'] = argmaxed_predicted_labels
 
-    with open(str(cfg.path.data_file_name), 'wb') as f:
-        pickle.dump(random_sampled_df, f)
+    #with open(str(cfg.path.data_file_name), 'wb') as f:
+    #    pickle.dump(random_sampled_df_unlabeled, f)
 
 if __name__ == '__main__':
     main()

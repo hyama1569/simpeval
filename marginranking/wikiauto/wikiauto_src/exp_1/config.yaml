@@ -3,7 +3,8 @@ wandb:
   exp_num: 1
   tags: [bert]
 path:
-  random_sampled_data: /workspace/simpeval/marginranking/wikiauto/data/random_sampled_df_max_cnt_6_randomsamp_16.pickle
+  random_sampled_data_labeled: /workspace/simpeval/marginranking/wikiauto/data/random_sampled_df_labeled_max_cnt_6_randomsamp_16.pickle
+  random_sampled_data_unlabeled: /workspace/simpeval/marginranking/wikiauto/data/random_sampled_df_unlabeled_max_cnt_6_randomsamp_16.pickle
   aug_data: /workspace/simpeval/marginranking/wikiauto/data/augmented_wikiauto_max_cnt_6.pickle
   sources: /workspace/simpeval/marginranking/wikiauto/data/wikiauto_sources.pickle
   targets: /workspace/simpeval/marginranking/wikiauto/data/wikiauto_targets.pickle
