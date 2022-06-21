@@ -27,6 +27,9 @@ wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=downloa
 #random sampled data
 #wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1QLPDxLQBZsY0-zWoRrH7HHL4BedvfcMM' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1QLPDxLQBZsY0-zWoRrH7HHL4BedvfcMM" -O augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle && rm -rf /tmp/cookies.txt
 
+#wikiauto_dataframe
+#wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1AEFplcg5_lE5plDKzoLzXEL3GqB-q23d' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1AEFplcg5_lE5plDKzoLzXEL3GqB-q23d" -O augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle && rm -rf /tmp/cookies.txt
+
 #move files
 mv w* ../../data
 mv a* ../../data
