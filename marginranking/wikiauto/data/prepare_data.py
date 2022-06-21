@@ -221,7 +221,7 @@ def random_sample_augmented_data(
                 sampled_case_nums_unlabeled.append(case_num)
         case_num += 1
     random_sampled_df_labeled = pd.DataFrame({'original':sampled_sources, 'simple':sampled_targets, 'case_number':sampled_case_nums, 'label':sampled_labels})
-    random_sampled_df_unlabeled = pd.DataFrame({'original':sampled_sources_unlabeled, 'simple':sampled_targets_unlabeled, 'case_number':sampled_case_nums})
+    random_sampled_df_unlabeled = pd.DataFrame({'original':sampled_sources_unlabeled, 'simple':sampled_targets_unlabeled, 'case_number':sampled_case_nums_unlabeled})
     return random_sampled_df_labeled, random_sampled_df_unlabeled
 
 @hydra.main(config_path="../wikiauto_src/exp_1", config_name="config")
