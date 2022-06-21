@@ -225,14 +225,21 @@ class BertRanker(pl.LightningModule):
         epoch_labels = torch.cat([x['batch_labels'] for x in outputs])
         epoch_loss = self.criterion(epoch_simp_preds, epoch_orig_preds, epoch_labels)
         self.log(f"{mode}_loss", epoch_loss, logger=True)
-                     
+
+        num_correct = (torch.sign(epoch_simp_preds-epoch_orig_preds) == epoch_labels).sum().item()
+        epoch_accuracy = num_correct / len(epoch_labels)
+        self.log(f"{mode}_rank_accuracy", epoch_accuracy, logger=True)                   
 
     def validation_epoch_end(self, outputs, mode="val"):
         epoch_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs])
         epoch_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs])
         epoch_labels = torch.cat([x['batch_labels'] for x in outputs])
         epoch_loss = self.criterion(epoch_simp_preds, epoch_orig_preds, epoch_labels)
-        self.log(f"{mode}_loss", epoch_loss, logger=True)                  
+        self.log(f"{mode}_loss", epoch_loss, logger=True)
+
+        num_correct = (torch.sign(epoch_simp_preds-epoch_orig_preds) == epoch_labels).sum().item()
+        epoch_accuracy = num_correct / len(epoch_labels)
+        self.log(f"{mode}_rank_accuracy", epoch_accuracy, logger=True)                      
 
     def test_epoch_end(self, outputs):
         return self.validation_epoch_end(outputs, "test")
