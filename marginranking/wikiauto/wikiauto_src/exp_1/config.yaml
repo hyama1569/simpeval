@@ -1,5 +1,5 @@
 wandb:
-  project: wikiauto_marginranking
+  project: wikiauto_marginranking_filtered
   exp_num: 1
   tags: [bert]
 path:
@@ -10,7 +10,7 @@ path:
   targets: /workspace/simpeval/marginranking/wikiauto/data/wikiauto_targets.pickle
   finetuned: /workspace/simpeval/marginranking/wikiauto/data/epoch=9.ckpt
   raw_predicted_path: /workspace/simpeval/marginranking/wikiauto/data/raw_predicted_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle
-  data_file_name: /workspace/simpeval/marginranking/wikiauto/data/augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle
+  data_file_name: /workspace/simpeval/marginranking/wikiauto/data/filtered_augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle
   checkpoint_path: checkpoints
 model:
   n_classes: 1

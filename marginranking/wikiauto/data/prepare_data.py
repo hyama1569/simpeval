@@ -268,9 +268,8 @@ def main(cfg: DictConfig):
             predicted_labels.append(preds)
 
     raw_predicted_labels = torch.cat([x for x in predicted_labels]).to('cpu')
-    random_sampled_df_unlabeled['label'] = raw_predicted_labels
     with open(cfg.path.raw_predicted_path, 'wb') as f:
-        pickle.dump(random_sampled_df_unlabeled, f)
+        pickle.dump(raw_predicted_labels, f)
 
     #argmaxed_predicted_labels = [1 if pred == 1 else -1 for pred in raw_predicted_labels.argmax(dim=1)]
 
