@@ -9,6 +9,7 @@ pip install hydra-core --upgrade
 pip install wandb
 wandb login
 python -m spacy download en_core_web_sm
+pip install torch==1.8.1+cu111  -f https://download.pytorch.org/whl/torch_stable.html
 
 #download data for prepare_data.py
 #sources
@@ -40,6 +41,7 @@ mv w* ../../data
 mv a* ../../data
 mv epoch=9.ckpt ../../data
 mv f* ../../data
+mv r* ../../data
 
 #exec prepare_data.py
 #python ../../data/prepare_data.py
