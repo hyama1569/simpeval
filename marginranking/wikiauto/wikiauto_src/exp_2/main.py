@@ -73,8 +73,8 @@ class AdditionalFeatureExtractor():
         model = prepare_model(args)
         aligns = get_alignment(model, args, self.origin, self.sent)
 
-        sent1_toks = preprocess_texts(self.origin)
-        sent2_toks = preprocess_texts(self.sent)
+        sent1_toks = preprocess_texts([self.origin])
+        sent2_toks = preprocess_texts([self.sent])
         edit_sequences = get_edit_sequences(sent1_toks, sent2_toks, aligns)
         return len(edit_sequences)
 
