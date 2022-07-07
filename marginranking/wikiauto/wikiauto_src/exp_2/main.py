@@ -2,7 +2,6 @@ from ast import Add
 from cProfile import label
 import os
 from random import shuffle
-from eo_augmentation.utils_neural_jacana import preprocess_texts
 import hydra
 import numpy as np
 import pandas as pd
@@ -19,10 +18,11 @@ from torchmetrics.functional import accuracy, auroc
 from transformers import BertModel, BertTokenizer
 from tseval.feature_extraction import get_compression_ratio, get_wordrank_score
 import sys
-sys.path.append('../../../eo_augmentaion')
+sys.path.append('/workspace/simpeval/eo_augmentation')
 from utils_neural_jacana import *
 from utils_apply_operations import *
 from utils_extract_edit_operation import *
+from utils_neural_jacana import *
 import argparse
 import nltk
 nltk.download('punkt')

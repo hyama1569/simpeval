@@ -3,7 +3,7 @@
 #requirements install
 pip install wandb
 wandb login
-pip install git+https://github.com:facebookresearch/text-simplification-evaluation.git
+pip install git+https://github.com/facebookresearch/text-simplification-evaluation.git
 pip install transformers
 pip install -U pip setuptools wheel
 pip install -U spacy
@@ -31,11 +31,13 @@ pip install torch==1.9+cu111  -f https://download.pytorch.org/whl/torch_stable.h
 #random sampled data filtered
 #wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1sQlVIUqivMuXcIeEJYTvo4oPCaWke4QJ' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1sQlVIUqivMuXcIeEJYTvo4oPCaWke4QJ" -O filtered_augmented_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle && rm -rf /tmp/cookies.txt
 #random sampled data labeled
-wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1c-7hSiGQLrbgOq9yqXs-EDQ4dDIZ6pvL' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1c-7hSiGQLrbgOq9yqXs-EDQ4dDIZ6pvL" -O random_sampled_df_labeled_max_cnt_6_randomsamp_16.pickle && rm -rf /tmp/cookies.txt
+#wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1c-7hSiGQLrbgOq9yqXs-EDQ4dDIZ6pvL' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1c-7hSiGQLrbgOq9yqXs-EDQ4dDIZ6pvL" -O random_sampled_df_labeled_max_cnt_6_randomsamp_16.pickle && rm -rf /tmp/cookies.txt
 
 
 #wikiauto_dataframe
 #wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1AEFplcg5_lE5plDKzoLzXEL3GqB-q23d' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1AEFplcg5_lE5plDKzoLzXEL3GqB-q23d" -O wikiauto_dataframe.pickle && rm -rf /tmp/cookies.txt
+#wikiauto_dataframe_addfeatures
+wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1ZAgWqpol18OqVIt5sX5eW_XOsrpGqnVc' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1ZAgWqpol18OqVIt5sX5eW_XOsrpGqnVc" -O wikiauto_dataframe_addfeatures.pickle && rm -rf /tmp/cookies.txt
 
 #move files
 mv w* ../../data
@@ -47,5 +49,3 @@ mv r* ../../data
 #exec prepare_data.py
 #python ../../data/prepare_data.py
 
-#prepare neutral_jacana
-bash ../../../eo_augmentation/neural_jacana/setup_for_get_alignments.sh
