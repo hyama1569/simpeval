@@ -17,15 +17,6 @@ from torch.utils.data import DataLoader, Dataset
 from torchmetrics.functional import accuracy, auroc
 from transformers import BertModel, BertTokenizer
 from tseval.feature_extraction import get_compression_ratio, get_wordrank_score
-import sys
-sys.path.append('/workspace/simpeval/eo_augmentation')
-from utils_neural_jacana import *
-from utils_apply_operations import *
-from utils_extract_edit_operation import *
-from utils_neural_jacana import *
-import argparse
-import nltk
-nltk.download('punkt')
 import spacy
 
 class AdditionalFeatureExtractor():
@@ -33,9 +24,11 @@ class AdditionalFeatureExtractor():
         self,
         origin: str,
         sent: str,
+        edit_sequences: object,
     ):
         self.origin = origin
         self.sent = sent
+        self.edit_sequences = edit_sequences
     
     def wordrank_score(self):
         return get_wordrank_score(self.sent)
@@ -55,28 +48,7 @@ class AdditionalFeatureExtractor():
         return get_compression_ratio(self.origin, self.sent)
     
     def edit_operation_nums(self):
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--batchsize", default=1, type=int)
-        parser.add_argument("--learning_rate", default=1e-5, type=float)
-        parser.add_argument("--max_epoch", default=6, type=int)
-        parser.add_argument("--max_span_size", default=1, type=int)
-        parser.add_argument("--max_seq_length", default=128, type=int)
-        parser.add_argument("--max_sent_length", default=70, type=int)
-        parser.add_argument("--seed", default=1234, type=int)
-        parser.add_argument("--dataset", default='mtref', type=str)
-        parser.add_argument("--sure_and_possible", default='True', type=str)
-        parser.add_argument("--distance_embedding_size", default=128, type=int)
-        parser.add_argument("--use_transition_layer", default='False', type=str, help='if False, will set transition score to 0.')
-        parser.add_argument("batch_size", default=1, type=int)
-        parser.add_argument("my_device", default='cuda', type=str)
-        args = parser.parse_args(args=[])
-        model = prepare_model(args)
-        aligns = get_alignment(model, args, self.origin, self.sent)
-
-        sent1_toks = preprocess_texts([self.origin])
-        sent2_toks = preprocess_texts([self.sent])
-        edit_sequences = get_edit_sequences(sent1_toks, sent2_toks, aligns)
-        return len(edit_sequences)
+        return len(self.edit_sequences)
 
 class AugmentedDataset(Dataset):
     def __init__(
@@ -87,6 +59,7 @@ class AugmentedDataset(Dataset):
         origin_column_name: str,
         orig_column_name: str,
         simp_column_name: str,
+        edit_sequences_name: str,
         label_column_name: str,
         case_num_column_name:str,
     ):
@@ -96,6 +69,7 @@ class AugmentedDataset(Dataset):
         self.origin_column_name = origin_column_name
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
+        self.edit_sequences_name = edit_sequences_name
         self.label_column_name = label_column_name
         self.case_num_column_name = case_num_column_name
 
@@ -107,6 +81,7 @@ class AugmentedDataset(Dataset):
         origin = data_row[self.origin_column_name]
         orig = data_row[self.orig_column_name]
         simp = data_row[self.simp_column_name]
+        edit_sequences = data_row[self.edit_sequences_name]
         label = data_row[self.label_column_name]
         case_num = data_row[self.case_num_column_name]
 
@@ -119,7 +94,7 @@ class AugmentedDataset(Dataset):
             return_attention_mask=True,
             return_tensors='pt',
         )
-        origs_feature_ext = AdditionalFeatureExtractor(origin=origin, sent=orig)
+        origs_feature_ext = AdditionalFeatureExtractor(origin=origin, sent=orig, edit_sequences=edit_sequences)
         origs_added_features = dict(
             wordrank_score=origs_feature_ext.wordrank_score(),
             maximum_deptree_depth=origs_feature_ext.maximum_deptree_depth(),
@@ -172,6 +147,7 @@ class CreateDataModule(pl.LightningDataModule):
         origin_column_name: str = 'origin',
         orig_column_name: str = 'original',
         simp_column_name: str = 'simple',
+        edit_sequences_name: str = 'edit_sequences',
         label_column_name: str = 'label',
         case_num_column_name: str = 'case_number',
         pretrained_model='bert-base-uncased',
@@ -185,6 +161,7 @@ class CreateDataModule(pl.LightningDataModule):
         self.origin_column_name = origin_column_name
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
+        self.edit_sequences_name = edit_sequences_name
         self.label_column_name = label_column_name
         self.case_num_column_name = case_num_column_name
         self.tokenizer = BertTokenizer.from_pretrained(pretrained_model)
@@ -198,6 +175,7 @@ class CreateDataModule(pl.LightningDataModule):
               self.origin_column_name,
               self.orig_column_name,
               self.simp_column_name,
+              self.edit_sequences_name,
               self.label_column_name,
               self.case_num_column_name,
             )
@@ -208,6 +186,7 @@ class CreateDataModule(pl.LightningDataModule):
               self.origin_column_name,
               self.orig_column_name,
               self.simp_column_name,
+              self.edit_sequences_name,
               self.label_column_name,
               self.case_num_column_name,
             )
@@ -219,6 +198,7 @@ class CreateDataModule(pl.LightningDataModule):
               self.origin_column_name,
               self.orig_column_name,
               self.simp_column_name,
+              self.edit_sequences_name,
               self.label_column_name,
               self.case_num_column_name,
             )

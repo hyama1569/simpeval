@@ -30,6 +30,7 @@ training:
   orign_column_name: origin
   orig_column_name: original
   simp_column_name: simple
+  edit_sequences_name: edit_sequences
   label_column_name: label
   case_num_column_name: case_number
 dataprep:
