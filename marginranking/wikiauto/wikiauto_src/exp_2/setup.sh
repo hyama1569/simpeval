@@ -46,3 +46,6 @@ mv r* ../../data
 
 #exec prepare_data.py
 #python ../../data/prepare_data.py
+
+#prepare neutral_jacana
+bash ../../../eo_augmentation/neural_jacana/setup_for_get_alignments.sh
