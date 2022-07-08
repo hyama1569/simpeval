@@ -177,9 +177,13 @@ def random_sample_augmented_data(
     sampled_targets = []
     sampled_case_nums = []
     sampled_labels = []
+    sampled_origins = []
+
     sampled_sources_unlabeled = []
     sampled_targets_unlabeled = []
     sampled_case_nums_unlabeled = []
+    sampled_origins_unlabeled = []
+
     case_num = 0
     print("start random sampling data.")
     for i in tqdm.tqdm(range(len(aug_data))):
@@ -190,24 +194,39 @@ def random_sample_augmented_data(
             sampled_targets.append(targets[i])
             sampled_case_nums.append(case_num)
             sampled_labels.append(1)
-            sampled_sources.append(targets[i])
-            sampled_targets.append(sources[i])
-            sampled_case_nums.append(case_num)
-            sampled_labels.append(-1)
+            sampled_origins.append(sources[i])
+            #sampled_sources.append(targets[i])
+            #sampled_targets.append(sources[i])
+            #sampled_case_nums.append(case_num)
+            #sampled_labels.append(-1)
             paired_cands = []
-            for perm in itertools.permutations(aug_data[i]+[sources[i], targets[i]], 2):
-                if (perm[0] == sources[i] and perm[1] == targets[i]) or (perm[0] == targets[i] and perm[1] == sources[i]):
+            #for perm in itertools.permutations(aug_data[i]+[sources[i], targets[i]], 2):
+            #    if (perm[0] == sources[i] and perm[1] == targets[i]) or (perm[0] == targets[i] and perm[1] == sources[i]):
+            #        continue
+            #    elif perm[0] == sources[i]:
+            #        paired_cands.append([perm[0], perm[1], 1])
+            #    elif perm[1] == sources[i]:
+            #        paired_cands.append([perm[0], perm[1], -200]) #dummy label
+            #    elif perm[0] == targets[i]:
+            #        paired_cands.append([perm[0], perm[1], -200]) #dummy label
+            #    elif perm[1] == targets[i]:
+            #        paired_cands.append([perm[0], perm[1], 1])
+            #    else:
+            #        paired_cands.append([perm[0], perm[1], -100]) #dummy label
+
+            for comb in itertools.combinations(aug_data[i]+[sources[i], targets[i]], 2):
+                if (comb[0] == sources[i] and comb[1] == targets[i]) or (comb[0] == targets[i] and comb[1] == sources[i]):
                     continue
-                elif perm[0] == sources[i]:
-                    paired_cands.append([perm[0], perm[1], 1])
-                elif perm[1] == sources[i]:
-                    paired_cands.append([perm[0], perm[1], -1])
-                elif perm[0] == targets[i]:
-                    paired_cands.append([perm[0], perm[1], -1])
-                elif perm[1] == targets[i]:
-                    paired_cands.append([perm[0], perm[1], 1])
+                elif comb[0] == sources[i]:
+                    paired_cands.append([comb[0], comb[1], 1])
+                elif comb[1] == sources[i]:
+                    paired_cands.append([comb[0], comb[1], -200]) #dummy label
+                elif comb[0] == targets[i]:
+                    paired_cands.append([comb[0], comb[1], -200]) #dummy label
+                elif comb[1] == targets[i]:
+                    paired_cands.append([comb[0], comb[1], 1])
                 else:
-                    paired_cands.append([perm[0], perm[1], -100]) #dummy label
+                    paired_cands.append([comb[0], comb[1], -100]) #dummy label
         rs_paired_cands = random.sample(paired_cands, min(n_samples, len(paired_cands)))
         for i in range(len(rs_paired_cands)):
             if rs_paired_cands[i][2] == 1 or rs_paired_cands[i][2] == -1:
@@ -215,13 +234,15 @@ def random_sample_augmented_data(
                 sampled_targets.append(rs_paired_cands[i][1])
                 sampled_case_nums.append(case_num)
                 sampled_labels.append(rs_paired_cands[i][2])
-            else:
+                sampled_origins.append(sources[i])
+            elif rs_paired_cands[i][2] == -100:
                 sampled_sources_unlabeled.append(rs_paired_cands[i][0]) 
                 sampled_targets_unlabeled.append(rs_paired_cands[i][1])
                 sampled_case_nums_unlabeled.append(case_num)
+                sampled_origins_unlabeled.append(sources[i])
         case_num += 1
-    random_sampled_df_labeled = pd.DataFrame({'original':sampled_sources, 'simple':sampled_targets, 'case_number':sampled_case_nums, 'label':sampled_labels})
-    random_sampled_df_unlabeled = pd.DataFrame({'original':sampled_sources_unlabeled, 'simple':sampled_targets_unlabeled, 'case_number':sampled_case_nums_unlabeled})
+    random_sampled_df_labeled = pd.DataFrame({'original':sampled_sources, 'simple':sampled_targets, 'case_number':sampled_case_nums, 'label':sampled_labels, 'origin': sampled_origins})
+    random_sampled_df_unlabeled = pd.DataFrame({'original':sampled_sources_unlabeled, 'simple':sampled_targets_unlabeled, 'case_number':sampled_case_nums_unlabeled, 'origin':sampled_origins_unlabeled})
     return random_sampled_df_labeled, random_sampled_df_unlabeled
 
 @hydra.main(config_path="../wikiauto_src/exp_1", config_name="config")

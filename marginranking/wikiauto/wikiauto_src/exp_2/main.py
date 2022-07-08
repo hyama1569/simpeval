@@ -18,6 +18,8 @@ from torchmetrics.functional import accuracy, auroc
 from transformers import BertModel, BertTokenizer
 from tseval.feature_extraction import get_compression_ratio, get_wordrank_score
 import spacy
+import nltk
+nltk.doenload('punkt')
 
 class AdditionalFeatureExtractor():
     def __init__(
@@ -112,7 +114,7 @@ class AugmentedDataset(Dataset):
             return_attention_mask=True,
             return_tensors='pt',
         )
-        simps_feature_ext = AdditionalFeatureExtractor(origin=origin, sent=simp)
+        simps_feature_ext = AdditionalFeatureExtractor(origin=origin, sent=simp, edit_sequences=edit_sequences)
         simps_added_features = dict(
             wordrank_score=simps_feature_ext.wordrank_score(),
             maximum_deptree_depth=simps_feature_ext.maximum_deptree_depth(),
@@ -254,7 +256,7 @@ class BertRanker(pl.LightningModule):
 
     def forward(self, input_ids, attention_mask, added_features):
         output = self.bert(input_ids, attention_mask=attention_mask)
-        output = torch.cat([added_features, output.pooler_output], dim=1)
+        output = torch.cat([added_features.float(), output.pooler_output], dim=1)
         preds = self.classifier(output)
         preds = torch.flatten(preds)
         return preds, output

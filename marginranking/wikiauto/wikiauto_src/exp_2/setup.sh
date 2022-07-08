@@ -5,7 +5,8 @@ pip install wandb
 wandb login
 pip install git+https://github.com/facebookresearch/text-simplification-evaluation.git
 pip install transformers
-pip install -U pip setuptools wheel
+#pip install -U pip setuptools wheel
+pip install setuptools==59.5.0
 pip install -U spacy
 pip install git+https://github.com/PyTorchLightning/pytorch-lightning
 pip install hydra-core --upgrade
