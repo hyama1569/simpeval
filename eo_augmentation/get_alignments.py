@@ -9,7 +9,7 @@ if __name__ == '__main__':
         targets = pickle.load(f)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--batchsize", default=1, type=int)
+    #parser.add_argument("--batchsize", default=1, type=int)
     parser.add_argument("--learning_rate", default=1e-5, type=float)
     parser.add_argument("--max_epoch", default=6, type=int)
     parser.add_argument("--max_span_size", default=1, type=int)
@@ -20,8 +20,8 @@ if __name__ == '__main__':
     parser.add_argument("--sure_and_possible", default='True', type=str)
     parser.add_argument("--distance_embedding_size", default=128, type=int)
     parser.add_argument("--use_transition_layer", default='False', type=str, help='if False, will set transition score to 0.')
-    parser.add_argument("batch_size", default=1, type=int)
-    parser.add_argument("my_device", default='cuda', type=str)
+    parser.add_argument("--batch_size", default=1, type=int)
+    parser.add_argument("--my_device", default='cuda', type=str)
     args = parser.parse_args(args=[])
 
     model = prepare_model(args)

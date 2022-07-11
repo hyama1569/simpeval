@@ -228,16 +228,16 @@ def random_sample_augmented_data(
                 else:
                     paired_cands.append([comb[0], comb[1], -100]) #dummy label
         rs_paired_cands = random.sample(paired_cands, min(n_samples, len(paired_cands)))
-        for i in range(len(rs_paired_cands)):
-            if rs_paired_cands[i][2] == 1 or rs_paired_cands[i][2] == -1:
-                sampled_sources.append(rs_paired_cands[i][0])
-                sampled_targets.append(rs_paired_cands[i][1])
+        for j in range(len(rs_paired_cands)):
+            if rs_paired_cands[j][2] == 1 or rs_paired_cands[j][2] == -1:
+                sampled_sources.append(rs_paired_cands[j][0])
+                sampled_targets.append(rs_paired_cands[j][1])
                 sampled_case_nums.append(case_num)
-                sampled_labels.append(rs_paired_cands[i][2])
+                sampled_labels.append(rs_paired_cands[j][2])
                 sampled_origins.append(sources[i])
-            elif rs_paired_cands[i][2] == -100:
-                sampled_sources_unlabeled.append(rs_paired_cands[i][0]) 
-                sampled_targets_unlabeled.append(rs_paired_cands[i][1])
+            elif rs_paired_cands[j][2] == -100:
+                sampled_sources_unlabeled.append(rs_paired_cands[j][0]) 
+                sampled_targets_unlabeled.append(rs_paired_cands[j][1])
                 sampled_case_nums_unlabeled.append(case_num)
                 sampled_origins_unlabeled.append(sources[i])
         case_num += 1
