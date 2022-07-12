@@ -1,0 +1,45 @@
+wandb:
+  project: wikiauto_marginranking_baseline
+  exp_num: 1
+  tags: [roberta]
+path:
+  #random_sampled_data_labeled: /workspace/simpeval/marginranking/wikiauto/data/random_sampled_df_labeled_max_cnt_6_randomsamp_16.pickle
+  #random_sampled_data_unlabeled: /workspace/simpeval/marginranking/wikiauto/data/random_sampled_df_unlabeled_max_cnt_6_randomsamp_16.pickle
+  #aug_data: /workspace/simpeval/marginranking/wikiauto/data/augmented_wikiauto_max_cnt_6.pickle
+  #sources: /workspace/simpeval/marginranking/wikiauto/data/wikiauto_sources.pickle
+  #targets: /workspace/simpeval/marginranking/wikiauto/data/wikiauto_targets.pickle
+  #finetuned: /workspace/simpeval/marginranking/wikiauto/data/epoch=9.ckpt
+  #raw_predicted_path: /workspace/simpeval/marginranking/wikiauto/data/raw_predicted_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle
+  data_file_name: /workspace/simpeval/marginranking/wikiauto/data/wikiauto_dataframe_addfeatures.pickle
+  checkpoint_path: checkpoints
+model:
+  n_classes: 1
+  n_linears: 1
+  d_hidden_linear: 128
+  dropout_rate: 0.2
+  max_token_len: 512
+training:
+  pl_seed: 1
+  test_size: 0.3
+  valid_size: 0.3
+  n_epochs: 10
+  batch_size: 128
+  learning_rate: 0.05
+  n_gpus: 1
+  orig_column_name: original
+  simp_column_name: simple
+  label_column_name: label
+  case_num_column_name: case_number
+dataprep:
+  n_random_sample: 16
+  random_seed: 0
+  batch_size: 64
+  max_token_len: 512
+  n_linears: 1
+  d_hidden_linear: 128
+  dropout_rate: 0.2
+
+
+callbacks:
+  patience: 5
+  patience_min_delta: 0
