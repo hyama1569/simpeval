@@ -152,16 +152,22 @@ class BertRanker(pl.LightningModule):
         d_hidden_linear: int,
         dropout_rate: float,
         learning_rate: float,
+        pooling_type: str,
         pretrained_model='bert-base-uncased',
     ):
         super().__init__()
         self.bert = BertModel.from_pretrained(pretrained_model, output_hidden_states=True, return_dict=True)
         
+        if pooling_type == '4_cls':
+            classifier_hidden_size = self.bert.config.hidden_size * 4
+        else:
+            classifier_hidden_size = self.bert.config.hidden_size
+
         if n_linears == 1:
-            self.classifier = nn.Linear(self.bert.config.hidden_size, n_classes)
+            self.classifier = nn.Linear(classifier_hidden_size, n_classes)
         else:
             classifier = nn.Sequential(
-                nn.Linear(self.bert.config.hidden_size, d_hidden_linear),
+                nn.Linear(classifier_hidden_size, d_hidden_linear),
                 nn.Sigmoid(),
                 nn.Dropout(p=dropout_rate),
             )
@@ -175,6 +181,7 @@ class BertRanker(pl.LightningModule):
         self.lr = learning_rate
         self.criterion = nn.MarginRankingLoss(margin=1.0)
         self.n_classes = n_classes
+        self.pooling_type = pooling_type
 
         for param in self.bert.parameters():
             param.requires_grad = False
@@ -185,6 +192,15 @@ class BertRanker(pl.LightningModule):
 
     def forward(self, input_ids, attention_mask):
         output = self.bert(input_ids, attention_mask=attention_mask)
+        if self.pooling_type == 'cls':
+            cls = output.pooler_output
+            preds = self.classifier(cls)
+        if self.pooling_type == 'max':
+            mp = output.last_hidden_state.max(1)[0]
+            preds = self.classifier(mp)
+        if self.pooling_type == '4_cls':
+            clses = torch.cat([output.hidden_states[-1*i][:,0] for i in range(1, 4+1)], dim=1)
+            preds = self.classifier(clses)
         preds = self.classifier(output.pooler_output)
         preds = torch.flatten(preds)
         return preds, output
