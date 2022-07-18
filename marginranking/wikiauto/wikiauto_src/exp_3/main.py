@@ -314,7 +314,7 @@ def main(cfg: DictConfig):
         d_hidden_linear=cfg.model.d_hidden_linear,
         dropout_rate=cfg.model.dropout_rate,
         learning_rate=cfg.training.learning_rate,
-        pooling_type=cfg.pooling_type,
+        pooling_type=cfg.model.pooling_type,
     )
     trainer = pl.Trainer(
         max_epochs=cfg.training.n_epochs,
