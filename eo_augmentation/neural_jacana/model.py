@@ -439,7 +439,7 @@ class NeuralWordAligner(nn.Module):
 			# print(sent1_valid_ids[i])
 			# print(sent1_valid_ids[i]+sent2_wordpiece_length[i]+1)
 			sent1_valid_ids_part2 = (sent1_valid_ids[i]+sent2_wordpiece_length[i]+1)*(sent1_valid_ids[i]>0).int()
-			sent1_valid_ids_part2 = torch.tensor(normalize_1d_tensor_to_list(sent1_valid_ids_part2)) ###### add this
+			sent1_valid_ids_part2 = torch.tensor(normalize_1d_tensor_to_list(sent1_valid_ids_part2)).to(self.my_device) ###### add this
 			# print(sent1_valid_ids_part2)
 			# sys.exit()
 			seq1.append(torch.index_select(all_hidden_states[i], 0, sent1_valid_ids[i]).unsqueeze(0) + torch.index_select(all_hidden_states_b_and_a[i], 0, sent1_valid_ids_part2).unsqueeze(0))
@@ -451,7 +451,7 @@ class NeuralWordAligner(nn.Module):
 					position=sent2_valid_ids[i][j]-sent1_wordpiece_length[i]-1
 					all_hidden_states_b_and_a[i][position:position+1,:]=torch.mean(all_hidden_states_b_and_a[i][position:position+diff, :], dim=0, keepdim=True)
 			sent2_valid_ids_part2 = (sent2_valid_ids[i]-sent1_wordpiece_length[i]-1)*(sent2_valid_ids[i]>0).int()
-			sent2_valid_ids_part2 = torch.tensor(normalize_1d_tensor_to_list(sent2_valid_ids_part2)) ###### add this
+			sent2_valid_ids_part2 = torch.tensor(normalize_1d_tensor_to_list(sent2_valid_ids_part2)).to(self.my_device) ###### add this
 			seq2.append(torch.index_select(all_hidden_states[i], 0, sent2_valid_ids[i]).unsqueeze(0) + torch.index_select(all_hidden_states_b_and_a[i], 0, sent2_valid_ids_part2).unsqueeze(0))
 		seq1 = torch.cat(seq1, 0) # bsz*128*768
 		seq2 = torch.cat(seq2, 0) # bsz*128*768
