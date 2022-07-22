@@ -18,8 +18,6 @@ from torchmetrics.functional import accuracy, auroc
 from transformers import BertModel, BertTokenizer
 from tseval.feature_extraction import get_compression_ratio, get_wordrank_score
 import spacy
-import nltk
-nltk.doenload('punkt')
 
 
 class AugmentedDataset(Dataset):
@@ -465,11 +463,11 @@ class BertRanker(pl.LightningModule):
         if self.pooling_type == 'max':
             mp = output.last_hidden_state.max(1)[0]
             output = torch.cat([added_features.float(), mp], dim=1)
-            preds = self.classifier(mp)
+            preds = self.classifier(output)
         if self.pooling_type == '4_cls':
             clses = torch.cat([output.hidden_states[-1*i][:,0] for i in range(1, 4+1)], dim=1)
             output = torch.cat([added_features.float(), clses], dim=1)
-            preds = self.classifier(clses)
+            preds = self.classifier(output)
         preds = torch.flatten(preds)
         return preds, output
       

@@ -21,6 +21,7 @@ model:
   pooling_type: cls
   #pooling_type: max
   #pooling_type: 4_cls
+  added_feature_num: 13
 training:
   pl_seed: 1
   test_size: 0.3
