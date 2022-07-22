@@ -3,10 +3,15 @@ import argparse
 from utils_neural_jacana import *
 
 if __name__ == '__main__':
-    with open('./src/wikiauto_sources.pickle', 'rb') as f:
-        sources = pickle.load(f)
-    with open('./src/wikiauto_targets.pickle', 'rb') as f:
-        targets = pickle.load(f)
+    #with open('./src/wikiauto_sources.pickle', 'rb') as f:
+    #    sources = pickle.load(f)
+    #with open('./src/wikiauto_targets.pickle', 'rb') as f:
+    #    targets = pickle.load(f)
+    with open('./src/random_sampled_df_labeled_max_cnt_6_randomsamp_16.pickle', 'rb') as f:
+        data = pickle.load(f)
+    
+    sources = data["original"]
+    targets = data["simple"]
 
     parser = argparse.ArgumentParser()
     #parser.add_argument("--batchsize", default=1, type=int)
@@ -26,5 +31,8 @@ if __name__ == '__main__':
 
     model = prepare_model(args)
     aligns = get_alignment(model, args, sources, targets)
-    with open('./src/aligns_wikiauto.pickle', 'wb') as f:
-                pickle.dump(aligns, f)
+    #with open('./src/aligns_wikiauto.pickle', 'wb') as f:
+    #   pickle.dump(aligns, f)
+    data["edit_sequences"] = aligns
+    with open('./src/augmented_wikiauto_dataframe.pickle', 'wb') as f:
+        pickle.dump(data, f)
