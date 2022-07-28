@@ -10,11 +10,11 @@ path:
   #targets: /workspace/simpeval/marginranking/wikiauto/data/wikiauto_targets.pickle
   #finetuned: /workspace/simpeval/marginranking/wikiauto/data/epoch=9.ckpt
   #raw_predicted_path: /workspace/simpeval/marginranking/wikiauto/data/raw_predicted_wikiauto_max_cnt_6_randomsamp_16_labeled_by_exp_1.pickle
-  data_file_name: /workspace/simpeval/marginranking/wikiauto/data/random_sampled_df_labeled_max_cnt_6_randomsamp_16.pickle
+  data_file_name: /workspace/simpeval/marginranking/wikiauto/data/wikiauto_dataframe_addfeatures_random_sampled.pickle
   checkpoint_path: checkpoints
 model:
   n_classes: 1
-  n_linears: 2
+  n_linears: 1
   d_hidden_linear: 128
   dropout_rate: 0.2
   max_token_len: 512
