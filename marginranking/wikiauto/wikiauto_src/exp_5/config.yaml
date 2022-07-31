@@ -1,6 +1,6 @@
 wandb:
   project: wikiauto_marginranking_addfeatures_baseline
-  exp_num: 8
+  exp_num: 12
   tags: [bert]
 path:
   #random_sampled_data_labeled: /workspace/simpeval/marginranking/wikiauto/data/random_sampled_df_labeled_max_cnt_6_randomsamp_16.pickle
@@ -18,11 +18,11 @@ model:
   d_hidden_linear: 128
   dropout_rate: 0.2
   max_token_len: 512
-  #pooling_type: cls
-  pooling_type: cls_meanpooled
+  pooling_type: cls
+  #pooling_type: cls_meanpooled
   #pooling_type: max
   #pooling_type: 4_cls
-  added_feature_num: 10
+  added_feature_num: 7
 training:
   pl_seed: 1
   test_size: 0.3

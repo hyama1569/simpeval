@@ -31,26 +31,26 @@ class AugmentedDataset(Dataset):
         origin_column_name: str,
         orig_column_name: str,
         simp_column_name: str,
-        #wordrank_score_name: str,
-        #wordrank_score_orig_name: str,
-        #syllables_per_word_name: str,
-        #syllables_per_word_orig_name: str,
-        #comp_ratio_name: str,
+        wordrank_score_name: str,
+        wordrank_score_orig_name: str,
+        syllables_per_word_name: str,
+        syllables_per_word_orig_name: str,
+        comp_ratio_name: str,
         deleted_words_prop_name: str,
         added_words_prop_name: str,
         reordered_words_prop_name: str,
         edit_sequences_len_name: str,
-        rep_operation_nums_name: str,
-        ad_operation_nums_name: str,
-        splr_operation_nums_name: str,
-        mvr_operation_nums_name: str,
-        d_operation_nums_name: str,
-        a_operation_nums_name: str,
-        #comp_ratio_orig_name: str,
-        #deleted_words_prop_orig_name: str,
-        #added_words_prop_orig_name: str,
-        #reordered_words_prop_orig_name: str,
-        #edit_sequences_len_orig_name: str,
+        #rep_operation_nums_name: str,
+        #ad_operation_nums_name: str,
+        #splr_operation_nums_name: str,
+        #mvr_operation_nums_name: str,
+        #d_operation_nums_name: str,
+        #a_operation_nums_name: str,
+        comp_ratio_orig_name: str,
+        deleted_words_prop_orig_name: str,
+        added_words_prop_orig_name: str,
+        reordered_words_prop_orig_name: str,
+        edit_sequences_len_orig_name: str,
         #rep_operation_nums_orig_name: str,
         #ad_operation_nums_orig_name: str,
         #splr_operation_nums_orig_name: str,
@@ -67,26 +67,26 @@ class AugmentedDataset(Dataset):
         self.origin_column_name = origin_column_name
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
-        #self.wordrank_score_name = wordrank_score_name
-        #self.wordrank_score_orig_name = wordrank_score_orig_name
-        #self.syllables_per_word_name = syllables_per_word_name
-        #self.syllables_per_word_orig_name = syllables_per_word_orig_name
-        #self.comp_ratio_name = comp_ratio_name
+        self.wordrank_score_name = wordrank_score_name
+        self.wordrank_score_orig_name = wordrank_score_orig_name
+        self.syllables_per_word_name = syllables_per_word_name
+        self.syllables_per_word_orig_name = syllables_per_word_orig_name
+        self.comp_ratio_name = comp_ratio_name
         self.deleted_words_prop_name = deleted_words_prop_name
         self.added_words_prop_name = added_words_prop_name
         self.reordered_words_prop_name = reordered_words_prop_name
         self.edit_sequences_len_name = edit_sequences_len_name
-        self.rep_operation_nums_name = rep_operation_nums_name
-        self.ad_operation_nums_name = ad_operation_nums_name
-        self.splr_operation_nums_name = splr_operation_nums_name
-        self.mvr_operation_nums_name = mvr_operation_nums_name
-        self.d_operation_nums_name = d_operation_nums_name
-        self.a_operation_nums_name = a_operation_nums_name
-        #self.comp_ratio_orig_name = comp_ratio_orig_name
-        #self.deleted_words_prop_orig_name = deleted_words_prop_orig_name
-        #self.added_words_prop_orig_name = added_words_prop_orig_name
-        #self.reordered_words_prop_orig_name = reordered_words_prop_orig_name
-        #self.edit_sequences_len_orig_name = edit_sequences_len_orig_name
+        #self.rep_operation_nums_name = rep_operation_nums_name
+        #self.ad_operation_nums_name = ad_operation_nums_name
+        #self.splr_operation_nums_name = splr_operation_nums_name
+        #self.mvr_operation_nums_name = mvr_operation_nums_name
+        #self.d_operation_nums_name = d_operation_nums_name
+        #self.a_operation_nums_name = a_operation_nums_name
+        self.comp_ratio_orig_name = comp_ratio_orig_name
+        self.deleted_words_prop_orig_name = deleted_words_prop_orig_name
+        self.added_words_prop_orig_name = added_words_prop_orig_name
+        self.reordered_words_prop_orig_name = reordered_words_prop_orig_name
+        self.edit_sequences_len_orig_name = edit_sequences_len_orig_name
         #self.rep_operation_nums_orig_name = rep_operation_nums_orig_name
         #self.ad_operation_nums_orig_name = ad_operation_nums_orig_name
         #self.splr_operation_nums_orig_name = splr_operation_nums_orig_name
@@ -105,26 +105,26 @@ class AugmentedDataset(Dataset):
         origin = data_row[self.origin_column_name]
         orig = data_row[self.orig_column_name]
         simp = data_row[self.simp_column_name]
-        #wordrank_score = data_row[self.wordrank_score_name]
-        #wordrank_score_orig = data_row[self.wordrank_score_orig_name]
-        #syllables_per_word = data_row[self.syllables_per_word_name]
-        #syllables_per_word_orig = data_row[self.syllables_per_word_orig_name]
-        #comp_ratio = data_row[self.comp_ratio_name]
+        wordrank_score = data_row[self.wordrank_score_name]
+        wordrank_score_orig = data_row[self.wordrank_score_orig_name]
+        syllables_per_word = data_row[self.syllables_per_word_name]
+        syllables_per_word_orig = data_row[self.syllables_per_word_orig_name]
+        comp_ratio = data_row[self.comp_ratio_name]
         deleted_words_prop = data_row[self.deleted_words_prop_name]
         added_words_prop = data_row[self.added_words_prop_name]
         reordered_words_prop = data_row[self.reordered_words_prop_name]
         edit_sequences_len = data_row[self.edit_sequences_len_name]
-        rep_operation_nums = data_row[self.rep_operation_nums_name]
-        ad_operation_nums = data_row[self.ad_operation_nums_name]
-        splr_operation_nums = data_row[self.splr_operation_nums_name]
-        mvr_operation_nums = data_row[self.mvr_operation_nums_name]
-        d_operation_nums = data_row[self.d_operation_nums_name]
-        a_operation_nums = data_row[self.a_operation_nums_name]
-        #comp_ratio_orig = data_row[self.comp_ratio_orig_name]
-        #deleted_words_prop_orig = data_row[self.deleted_words_prop_orig_name]
-        #added_words_prop_orig = data_row[self.added_words_prop_orig_name]
-        #reordered_words_prop_orig = data_row[self.reordered_words_prop_orig_name]
-        #edit_sequences_len_orig = data_row[self.edit_sequences_len_orig_name]
+        #rep_operation_nums = data_row[self.rep_operation_nums_name]
+        #ad_operation_nums = data_row[self.ad_operation_nums_name]
+        #splr_operation_nums = data_row[self.splr_operation_nums_name]
+        #mvr_operation_nums = data_row[self.mvr_operation_nums_name]
+        #d_operation_nums = data_row[self.d_operation_nums_name]
+        #a_operation_nums = data_row[self.a_operation_nums_name]
+        comp_ratio_orig = data_row[self.comp_ratio_orig_name]
+        deleted_words_prop_orig = data_row[self.deleted_words_prop_orig_name]
+        added_words_prop_orig = data_row[self.added_words_prop_orig_name]
+        reordered_words_prop_orig = data_row[self.reordered_words_prop_orig_name]
+        edit_sequences_len_orig = data_row[self.edit_sequences_len_orig_name]
         #rep_operation_nums_orig = data_row[self.rep_operation_nums_orig_name]
         #ad_operation_nums_orig = data_row[self.ad_operation_nums_orig_name]
         #splr_operation_nums_orig = data_row[self.splr_operation_nums_orig_name]
@@ -146,19 +146,19 @@ class AugmentedDataset(Dataset):
         )
     
         origs_added_features = dict(
-            #wordrank_score_orig=wordrank_score,
-            #syllables_per_word_orig=syllables_per_word,
-            #comp_ratio_orig=comp_ratio,
-            deleted_words_prop_orig=deleted_words_prop,
-            added_words_prop_orig=added_words_prop,
-            reordered_words_prop_orig=reordered_words_prop,
-            edit_sequences_len_orig=edit_sequences_len,
-            rep_operation_nums_orig=rep_operation_nums,
-            ad_operation_nums_orig=ad_operation_nums,
-            splr_operation_nums_orig=splr_operation_nums,
-            mvr_operation_nums_orig=mvr_operation_nums,
-            d_operation_nums_orig=d_operation_nums,
-            a_operation_nums_orig=a_operation_nums,
+            wordrank_score_orig=wordrank_score_orig,
+            syllables_per_word_orig=syllables_per_word_orig,
+            comp_ratio_orig=comp_ratio_orig,
+            deleted_words_prop_orig=deleted_words_prop_orig,
+            added_words_prop_orig=added_words_prop_orig,
+            reordered_words_prop_orig=reordered_words_prop_orig,
+            edit_sequences_len_orig=edit_sequences_len_orig,
+            #rep_operation_nums_orig=rep_operation_nums,
+            #ad_operation_nums_orig=ad_operation_nums,
+            #splr_operation_nums_orig=splr_operation_nums,
+            #mvr_operation_nums_orig=mvr_operation_nums,
+            #d_operation_nums_orig=d_operation_nums,
+            #a_operation_nums_orig=a_operation_nums,
         )
         origs_added_features_tensor = torch.tensor([list(origs_added_features.values())])
 
@@ -173,19 +173,19 @@ class AugmentedDataset(Dataset):
         )
 
         simps_added_features = dict(
-            #wordrank_score=wordrank_score,
-            #syllables_per_word=syllables_per_word,
-            #comp_ratio=comp_ratio,
+            wordrank_score=wordrank_score,
+            syllables_per_word=syllables_per_word,
+            comp_ratio=comp_ratio,
             deleted_words_prop=deleted_words_prop,
             added_words_prop=added_words_prop,
             reordered_words_prop=reordered_words_prop,
             edit_sequences_len=edit_sequences_len,
-            rep_operation_nums=rep_operation_nums,
-            ad_operation_nums=ad_operation_nums,
-            splr_operation_nums=splr_operation_nums,
-            mvr_operation_nums=mvr_operation_nums,
-            d_operation_nums=d_operation_nums,
-            a_operation_nums=a_operation_nums,
+            #rep_operation_nums=rep_operation_nums,
+            #ad_operation_nums=ad_operation_nums,
+            #splr_operation_nums=splr_operation_nums,
+            #mvr_operation_nums=mvr_operation_nums,
+            #d_operation_nums=d_operation_nums,
+            #a_operation_nums=a_operation_nums,
         )
         simps_added_features_tensor = torch.tensor([list(simps_added_features.values())])
 
@@ -215,26 +215,26 @@ class CreateDataModule(pl.LightningDataModule):
         origin_column_name: str = 'origin',
         orig_column_name: str = 'original',
         simp_column_name: str = 'simple',
-        #wordrank_score_name: str = 'wordrank_score',
-        #wordrank_score_orig_name: str = 'wordrank_score_orig',
-        #syllables_per_word_name: str = 'syllables_per_word',
-        #syllables_per_word_orig_name: str = 'syllables_per_word_orig',
-        #comp_ratio_name: str = 'comp_ratio',
+        wordrank_score_name: str = 'wordrank_score',
+        wordrank_score_orig_name: str = 'wordrank_score_orig',
+        syllables_per_word_name: str = 'syllables_per_word',
+        syllables_per_word_orig_name: str = 'syllables_per_word_orig',
+        comp_ratio_name: str = 'comp_ratio',
         deleted_words_prop_name: str = 'deleted_words_prop',
         added_words_prop_name: str = 'added_words_prop',
         reordered_words_prop_name: str = 'reordered_words_prop',
         edit_sequences_len_name: str = 'edit_sequences_len',
-        rep_operation_nums_name: str = 'rep_operation_nums',
-        ad_operation_nums_name: str = 'ad_operation_nums',
-        splr_operation_nums_name: str = 'splr_operation_nums',
-        mvr_operation_nums_name: str = 'mvr_operation_nums',
-        d_operation_nums_name: str = 'd_operation_nums',
-        a_operation_nums_name: str = 'a_operation_nums',
-        #comp_ratio_orig_name: str = 'comp_ratio_orig',
-        #deleted_words_prop_orig_name: str = 'deleted_words_prop_orig',
-        #added_words_prop_orig_name: str = 'added_words_prop_orig',
-        #reordered_words_prop_orig_name: str = 'reordered_words_prop_orig',
-        #edit_sequences_len_orig_name: str = 'edit_sequences_len_orig',
+        #rep_operation_nums_name: str = 'rep_operation_nums',
+        #ad_operation_nums_name: str = 'ad_operation_nums',
+        #splr_operation_nums_name: str = 'splr_operation_nums',
+        #mvr_operation_nums_name: str = 'mvr_operation_nums',
+        #d_operation_nums_name: str = 'd_operation_nums',
+        #a_operation_nums_name: str = 'a_operation_nums',
+        comp_ratio_orig_name: str = 'comp_ratio_orig',
+        deleted_words_prop_orig_name: str = 'deleted_words_prop_orig',
+        added_words_prop_orig_name: str = 'added_words_prop_orig',
+        reordered_words_prop_orig_name: str = 'reordered_words_prop_orig',
+        edit_sequences_len_orig_name: str = 'edit_sequences_len_orig',
         #rep_operation_nums_orig_name: str = 'rep_operation_nums_orig',
         #ad_operation_nums_orig_name: str = 'ad_operation_nums_orig',
         #splr_operation_nums_orig_name: str = 'splr_operation_nums_orig',
@@ -255,26 +255,26 @@ class CreateDataModule(pl.LightningDataModule):
         self.origin_column_name = origin_column_name
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
-        #self.wordrank_score_name = wordrank_score_name
-        #self.wordrank_score_orig_name = wordrank_score_orig_name
-        #self.syllables_per_word_name = syllables_per_word_name
-        #self.syllables_per_word_orig_name = syllables_per_word_orig_name
-        #self.comp_ratio_name = comp_ratio_name
+        self.wordrank_score_name = wordrank_score_name
+        self.wordrank_score_orig_name = wordrank_score_orig_name
+        self.syllables_per_word_name = syllables_per_word_name
+        self.syllables_per_word_orig_name = syllables_per_word_orig_name
+        self.comp_ratio_name = comp_ratio_name
         self.deleted_words_prop_name = deleted_words_prop_name
         self.added_words_prop_name = added_words_prop_name
         self.reordered_words_prop_name = reordered_words_prop_name
         self.edit_sequences_len_name = edit_sequences_len_name
-        self.rep_operation_nums_name = rep_operation_nums_name
-        self.ad_operation_nums_name = ad_operation_nums_name
-        self.splr_operation_nums_name = splr_operation_nums_name
-        self.mvr_operation_nums_name = mvr_operation_nums_name
-        self.d_operation_nums_name = d_operation_nums_name
-        self.a_operation_nums_name = a_operation_nums_name
-        #self.comp_ratio_orig_name = comp_ratio_orig_name
-        #self.deleted_words_prop_orig_name = deleted_words_prop_orig_name
-        #self.added_words_prop_orig_name = added_words_prop_orig_name
-        #self.reordered_words_prop_orig_name = reordered_words_prop_orig_name
-        #self.edit_sequences_len_orig_name = edit_sequences_len_orig_name
+        #self.rep_operation_nums_name = rep_operation_nums_name
+        #self.ad_operation_nums_name = ad_operation_nums_name
+        #self.splr_operation_nums_name = splr_operation_nums_name
+        #self.mvr_operation_nums_name = mvr_operation_nums_name
+        #self.d_operation_nums_name = d_operation_nums_name
+        #self.a_operation_nums_name = a_operation_nums_name
+        self.comp_ratio_orig_name = comp_ratio_orig_name
+        self.deleted_words_prop_orig_name = deleted_words_prop_orig_name
+        self.added_words_prop_orig_name = added_words_prop_orig_name
+        self.reordered_words_prop_orig_name = reordered_words_prop_orig_name
+        self.edit_sequences_len_orig_name = edit_sequences_len_orig_name
         #self.rep_operation_nums_orig_name = rep_operation_nums_orig_name
         #self.ad_operation_nums_orig_name = ad_operation_nums_orig_name
         #self.splr_operation_nums_orig_name = splr_operation_nums_orig_name
@@ -295,26 +295,26 @@ class CreateDataModule(pl.LightningDataModule):
               self.origin_column_name,
               self.orig_column_name,
               self.simp_column_name,
-              #self.wordrank_score_name,
-              #self.wordrank_score_orig_name,
-              #self.syllables_per_word_name,
-              #self.syllables_per_word_orig_name,
-              #self.comp_ratio_name,
+              self.wordrank_score_name,
+              self.wordrank_score_orig_name,
+              self.syllables_per_word_name,
+              self.syllables_per_word_orig_name,
+              self.comp_ratio_name,
               self.deleted_words_prop_name,
               self.added_words_prop_name,
               self.reordered_words_prop_name,
               self.edit_sequences_len_name,
-              self.rep_operation_nums_name,
-              self.ad_operation_nums_name,
-              self.splr_operation_nums_name,
-              self.mvr_operation_nums_name,
-              self.d_operation_nums_name,
-              self.a_operation_nums_name,
-              #self.comp_ratio_orig_name,
-              #self.deleted_words_prop_orig_name,
-              #self.added_words_prop_orig_name,
-              #self.reordered_words_prop_orig_name,
-              #self.edit_sequences_len_orig_name,
+              #self.rep_operation_nums_name,
+              #self.ad_operation_nums_name,
+              #self.splr_operation_nums_name,
+              #self.mvr_operation_nums_name,
+              #self.d_operation_nums_name,
+              #self.a_operation_nums_name,
+              self.comp_ratio_orig_name,
+              self.deleted_words_prop_orig_name,
+              self.added_words_prop_orig_name,
+              self.reordered_words_prop_orig_name,
+              self.edit_sequences_len_orig_name,
               #self.rep_operation_nums_orig_name,
               #self.ad_operation_nums_orig_name,
               #self.splr_operation_nums_orig_name,
@@ -332,26 +332,26 @@ class CreateDataModule(pl.LightningDataModule):
               self.origin_column_name,
               self.orig_column_name,
               self.simp_column_name,
-              #self.wordrank_score_name,
-              #self.wordrank_score_orig_name,
-              #self.syllables_per_word_name,
-              #self.syllables_per_word_orig_name,
-              #self.comp_ratio_name,
+              self.wordrank_score_name,
+              self.wordrank_score_orig_name,
+              self.syllables_per_word_name,
+              self.syllables_per_word_orig_name,
+              self.comp_ratio_name,
               self.deleted_words_prop_name,
               self.added_words_prop_name,
               self.reordered_words_prop_name,
               self.edit_sequences_len_name,
-              self.rep_operation_nums_name,
-              self.ad_operation_nums_name,
-              self.splr_operation_nums_name,
-              self.mvr_operation_nums_name,
-              self.d_operation_nums_name,
-              self.a_operation_nums_name,
-              #self.comp_ratio_orig_name,
-              #self.deleted_words_prop_orig_name,
-              #self.added_words_prop_orig_name,
-              #self.reordered_words_prop_orig_name,
-              #self.edit_sequences_len_orig_name,
+              #self.rep_operation_nums_name,
+              #self.ad_operation_nums_name,
+              #self.splr_operation_nums_name,
+              #self.mvr_operation_nums_name,
+              #self.d_operation_nums_name,
+              #self.a_operation_nums_name,
+              self.comp_ratio_orig_name,
+              self.deleted_words_prop_orig_name,
+              self.added_words_prop_orig_name,
+              self.reordered_words_prop_orig_name,
+              self.edit_sequences_len_orig_name,
               #self.rep_operation_nums_orig_name,
               #self.ad_operation_nums_orig_name,
               #self.splr_operation_nums_orig_name,
@@ -370,26 +370,26 @@ class CreateDataModule(pl.LightningDataModule):
               self.origin_column_name,
               self.orig_column_name,
               self.simp_column_name,
-              #self.wordrank_score_name,
-              #self.wordrank_score_orig_name,
-              #self.syllables_per_word_name,
-              #self.syllables_per_word_orig_name,
-              #self.comp_ratio_name,
+              self.wordrank_score_name,
+              self.wordrank_score_orig_name,
+              self.syllables_per_word_name,
+              self.syllables_per_word_orig_name,
+              self.comp_ratio_name,
               self.deleted_words_prop_name,
               self.added_words_prop_name,
               self.reordered_words_prop_name,
               self.edit_sequences_len_name,
-              self.rep_operation_nums_name,
-              self.ad_operation_nums_name,
-              self.splr_operation_nums_name,
-              self.mvr_operation_nums_name,
-              self.d_operation_nums_name,
-              self.a_operation_nums_name,
-              #self.comp_ratio_orig_name,
-              #self.deleted_words_prop_orig_name,
-              #self.added_words_prop_orig_name,
-              #self.reordered_words_prop_orig_name,
-              #self.edit_sequences_len_orig_name,
+              #self.rep_operation_nums_name,
+              #self.ad_operation_nums_name,
+              #self.splr_operation_nums_name,
+              #self.mvr_operation_nums_name,
+              #self.d_operation_nums_name,
+              #self.a_operation_nums_name,
+              self.comp_ratio_orig_name,
+              self.deleted_words_prop_orig_name,
+              self.added_words_prop_orig_name,
+              self.reordered_words_prop_orig_name,
+              self.edit_sequences_len_orig_name,
               #self.rep_operation_nums_orig_name,
               #self.ad_operation_nums_orig_name,
               #self.splr_operation_nums_orig_name,
@@ -429,7 +429,10 @@ class BertRanker(pl.LightningModule):
         else:
             classifier_hidden_size = self.bert.config.hidden_size
         if n_linears == 1:
-            self.classifier = nn.Linear(1 + added_feature_num, n_classes)
+            if pooling_type == 'cls_meanpooled':
+                self.classifier = nn.Linear(1 + added_feature_num, n_classes)
+            else:
+                self.classifier = nn.Linear(classifier_hidden_size + added_feature_num, n_classes)
         else:
             classifier = nn.Sequential(
                 nn.Linear(classifier_hidden_size + added_feature_num, d_hidden_linear),
@@ -475,7 +478,7 @@ class BertRanker(pl.LightningModule):
         if self.pooling_type == '4_cls':
             clses = torch.cat([output.hidden_states[-1*i][:,0] for i in range(1, 4+1)], dim=1)
             output = torch.cat([added_features.float(), clses], dim=1)
-            preds = self.classifier(clses)
+            preds = self.classifier(output)
         preds = torch.flatten(preds)
         return preds, output
       

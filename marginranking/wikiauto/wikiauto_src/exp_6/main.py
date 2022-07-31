@@ -429,7 +429,10 @@ class BertRanker(pl.LightningModule):
         else:
             classifier_hidden_size = self.bert.config.hidden_size
         if n_linears == 1:
-            self.classifier = nn.Linear(1 + added_feature_num, n_classes)
+            if pooling_type == 'cls_meanpooled':
+                self.classifier = nn.Linear(1 + added_feature_num, n_classes)
+            else:
+                self.classifier = nn.Linear(classifier_hidden_size + added_feature_num, n_classes)
         else:
             classifier = nn.Sequential(
                 nn.Linear(classifier_hidden_size + added_feature_num, d_hidden_linear),
@@ -475,7 +478,7 @@ class BertRanker(pl.LightningModule):
         if self.pooling_type == '4_cls':
             clses = torch.cat([output.hidden_states[-1*i][:,0] for i in range(1, 4+1)], dim=1)
             output = torch.cat([added_features.float(), clses], dim=1)
-            preds = self.classifier(clses)
+            preds = self.classifier(output)
         preds = torch.flatten(preds)
         return preds, output
       
