@@ -19,14 +19,14 @@ if __name__ == '__main__':
 
     sources = data["original"].tolist()
     targets = data["simple"].tolist()
-    aligns = data["edit_sequences"].tolist()
+    edit_sequences = data["edit_sequences"].tolist()
         
     nltk.download('punkt')
     sent1_toks = preprocess_texts(sources)
     sent2_toks = preprocess_texts(targets)
     nlp = spacy.load('en_core_web_sm')
 
-    edit_sequences = get_edit_sequences(sent1_toks, sent2_toks, aligns)
+    #edit_sequences = get_edit_sequences(sent1_toks, sent2_toks, aligns)
     max_cnt = 2
     #max_cnt = 6
     #max_cnt = 14
