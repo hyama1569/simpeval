@@ -42,6 +42,9 @@ wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=downloa
 #wikiauto_dataframe_addfeatures_random_sampled
 #wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1rZj471yIAgYVPIsCOsFj1dPVJ4XWb3nJ' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1rZj471yIAgYVPIsCOsFj1dPVJ4XWb3nJ" -O wikiauto_dataframe_addfeatures_random_sampled.pickle && rm -rf /tmp/cookies.txt
 
+#wikiaut_dataframe_addfeatures_max_cnt_2
+wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1lAUtm6r4pp-UbTdn60lG3ng-b3sG0ICj' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1lAUtm6r4pp-UbTdn60lG3ng-b3sG0ICj" -O wikiauto_dataframe_addfeatures_max_cnt_2.pickle && rm -rf /tmp/cookies.txt
+
 
 #move files
 mv w* ../../data
