@@ -50,6 +50,7 @@ def get_edit_sequences(sent1_toks, sent2_toks, aligns):
 def apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt):
     random.seed(111)
     applied_sentences_all = []
+    applied_edit_sequences_all = []
 
     for i in tqdm.tqdm(range(len(edit_sequences))):
         edit_sequence = edit_sequences[i]
@@ -126,7 +127,10 @@ def apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt):
                             else:
                                 continue 
                     applied_sentences.append(" ".join(applied_sentence_tok))
+                    #applied_edit_sequences_all.append(apply_sequence)
             applied_sentences_all.append(applied_sentences)
+            applied_edit_sequences_all.append(apply_sequences)
         else:
+            applied_edit_sequences_all.append([])
             applied_sentences_all.append([])
-    return applied_sentences_all    
+    return applied_sentences_all, applied_edit_sequences_all

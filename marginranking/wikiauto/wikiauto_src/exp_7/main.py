@@ -28,12 +28,18 @@ class AugmentedDataset(Dataset):
         data: pd.DataFrame, 
         tokenizer: BertTokenizer, 
         max_token_len: int,
+        origin_column_name: str,
+        orig_column_name: str,
+        simp_column_name: str,
         label_column_name: str,
         #case_num_column_name:str,
     ):
         self.data = data
         self.tokenizer = tokenizer
         self.max_token_len = max_token_len
+        self.origin_column_name = origin_column_name
+        self.orig_column_name = orig_column_name
+        self.simp_column_name = simp_column_name
         self.label_column_name = label_column_name
         #self.case_num_column_name = case_num_column_name
 
