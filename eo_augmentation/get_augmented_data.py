@@ -17,9 +17,9 @@ if __name__ == '__main__':
     with open('./src/wikiauto_dataframe_addfeatures.pickle', 'rb') as f:
         data = pickle.load(f)
 
-    sources = data["original"]
-    targets = data["simple"]
-    aligns = data["edit_sequences"]
+    sources = data["original"].tolist()
+    targets = data["simple"].tolist()
+    aligns = data["edit_sequences"].tolist()
         
     nltk.download('punkt')
     sent1_toks = preprocess_texts(sources)
@@ -33,3 +33,5 @@ if __name__ == '__main__':
     applied_sentences_all, applied_edit_sequences_all = apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt)
     with open('./src/augmented_wikiauto_max_cnt_2.pickle', 'wb') as f:
         pickle.dump(applied_sentences_all, f)
+    with open('./src/augmented_wikiauto_applied_sequences_max_cnt_2.pickle', 'wb') as f:
+        pickle.dump(applied_edit_sequences_all, f)
