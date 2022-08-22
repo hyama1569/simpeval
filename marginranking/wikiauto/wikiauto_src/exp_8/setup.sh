@@ -45,6 +45,9 @@ wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=downloa
 #wikiaut_dataframe_addfeatures_max_cnt_2
 wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1lAUtm6r4pp-UbTdn60lG3ng-b3sG0ICj' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1lAUtm6r4pp-UbTdn60lG3ng-b3sG0ICj" -O wikiauto_dataframe_addfeatures_max_cnt_2.pickle && rm -rf /tmp/cookies.txt
 
+#wikiauto_dataframe_addfeatures_max_cnt_3
+wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1tc4d3Z3PqTkDngOJ7a2_RFaYgIjZr_sg' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1tc4d3Z3PqTkDngOJ7a2_RFaYgIjZr_sg" -O wikiauto_dataframe_addfeatures_max_cnt_3.pickle && rm -rf /tmp/cookies.txt
+
 
 #move files
 mv w* ../../data
