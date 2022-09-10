@@ -3,18 +3,18 @@ wandb:
   exp_num: 1
   tags: [bert]
 path:
-  data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_25.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_max_cnt_2_25.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_max_cnt_3_25.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_50.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_max_cnt_2_50.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_max_cnt_3_50.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_75.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_max_cnt_2_75.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_max_cnt_3_75.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_max_cnt_2_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/wikiauto/data/newsela_dataframe_addfeatures_max_cnt_3_100.pickle
+  data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_2_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_3_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_2_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_3_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_2_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_3_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_3_100.pickle
   checkpoint_path: checkpoints
 model:
   n_classes: 1
