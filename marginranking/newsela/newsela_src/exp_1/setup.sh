@@ -11,7 +11,7 @@ pip install transformers
 pip install git+https://github.com/PyTorchLightning/pytorch-lightning
 pip install hydra-core --upgrade
 python -m spacy download en_core_web_sm
-pip install torch==1.9+cu111  -f https://download.pytorch.org/whl/torch_stable.html
+#pip install torch==1.9+cu111  -f https://download.pytorch.org/whl/torch_stable.html
 
 ##newsela_dataframe_addfeatures
 #100
