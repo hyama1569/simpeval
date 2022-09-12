@@ -292,14 +292,14 @@ class BertRanker(pl.LightningModule):
         return self.validation_epoch_end(outputs, "test")
 
     def configure_optimizers(self):
-        return optim.Adam(self.parameters(), lr=self.lr)
+        return optim.AdamW(self.parameters(), lr=self.lr)
 
 def make_callbacks(min_delta, patience, checkpoint_path):
 
     checkpoint_callback = ModelCheckpoint(
         dirpath=checkpoint_path,
         filename="{epoch}",
-        save_top_k=3,
+        save_top_k=1,
         verbose=True,
         monitor="val_loss",
         mode="min",
