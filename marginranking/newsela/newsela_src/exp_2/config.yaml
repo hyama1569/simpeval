@@ -1,0 +1,41 @@
+wandb:
+  project: newsela_p2_addfeatures_25
+  exp_num: 1
+  tags: [bert]
+path:
+  data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_2_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_3_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_2_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_3_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_2_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_3_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_dataframe_addfeatures_max_cnt_3_100.pickle
+  checkpoint_path: checkpoints
+model:
+  n_classes: 1
+  n_linears: 1
+  d_hidden_linear: 128
+  dropout_rate: 0.2
+  max_token_len: 512
+  pooling_type: cls
+  #pooling_type: cls_meanpooled
+  #pooling_type: max
+  #pooling_type: 4_cls
+  added_feature_num: 0
+training:
+  pl_seed: 1
+  test_size: 0.3
+  valid_size: 0.3
+  n_epochs: 10
+  batch_size: 16
+  learning_rate: 0.0001
+  n_gpus: 1
+
+callbacks:
+  patience: 5
+  patience_min_delta: 0

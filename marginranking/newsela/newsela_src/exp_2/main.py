@@ -31,8 +31,21 @@ class AugmentedDataset(Dataset):
         #origin_column_name: str,
         orig_column_name: str,
         simp_column_name: str,
+        wordrank_score_name: str,
+        wordrank_score_orig_name: str,
+        syllables_per_word_name: str,
+        syllables_per_word_orig_name: str,
+        comp_ratio_name: str,
+        deleted_words_prop_name: str,
+        added_words_prop_name: str,
+        reordered_words_prop_name: str,
+        edit_sequences_len_name: str,
+        comp_ratio_orig_name: str,
+        deleted_words_prop_orig_name: str,
+        added_words_prop_orig_name: str,
+        reordered_words_prop_orig_name: str,
+        edit_sequences_len_orig_name: str,
         label_column_name: str,
-        #case_num_column_name:str,
     ):
         self.data = data
         self.tokenizer = tokenizer
@@ -40,8 +53,21 @@ class AugmentedDataset(Dataset):
         #self.origin_column_name = origin_column_name
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
+        self.wordrank_score_name = wordrank_score_name
+        self.wordrank_score_orig_name = wordrank_score_orig_name
+        self.syllables_per_word_name = syllables_per_word_name
+        self.syllables_per_word_orig_name = syllables_per_word_orig_name
+        self.comp_ratio_name = comp_ratio_name
+        self.deleted_words_prop_name = deleted_words_prop_name
+        self.added_words_prop_name = added_words_prop_name
+        self.reordered_words_prop_name = reordered_words_prop_name
+        self.edit_sequences_len_name = edit_sequences_len_name
+        self.comp_ratio_orig_name = comp_ratio_orig_name
+        self.deleted_words_prop_orig_name = deleted_words_prop_orig_name
+        self.added_words_prop_orig_name = added_words_prop_orig_name
+        self.reordered_words_prop_orig_name = reordered_words_prop_orig_name
+        self.edit_sequences_len_orig_name = edit_sequences_len_orig_name
         self.label_column_name = label_column_name
-        #self.case_num_column_name = case_num_column_name
 
     def __len__(self):
         return len(self.data)
@@ -51,8 +77,21 @@ class AugmentedDataset(Dataset):
         #origin = data_row[self.origin_column_name]
         orig = data_row[self.orig_column_name]
         simp = data_row[self.simp_column_name]
+        wordrank_score = data_row[self.wordrank_score_name]
+        wordrank_score_orig = data_row[self.wordrank_score_orig_name]
+        syllables_per_word = data_row[self.syllables_per_word_name]
+        syllables_per_word_orig = data_row[self.syllables_per_word_orig_name]
+        comp_ratio = data_row[self.comp_ratio_name]
+        deleted_words_prop = data_row[self.deleted_words_prop_name]
+        added_words_prop = data_row[self.added_words_prop_name]
+        reordered_words_prop = data_row[self.reordered_words_prop_name]
+        edit_sequences_len = data_row[self.edit_sequences_len_name]
+        comp_ratio_orig = data_row[self.comp_ratio_orig_name]
+        deleted_words_prop_orig = data_row[self.deleted_words_prop_orig_name]
+        added_words_prop_orig = data_row[self.added_words_prop_orig_name]
+        reordered_words_prop_orig = data_row[self.reordered_words_prop_orig_name]
+        edit_sequences_len_orig = data_row[self.edit_sequences_len_orig_name]
         label = data_row[self.label_column_name]
-        #case_num = data_row[self.case_num_column_name]
 
         encoding_origs = self.tokenizer.encode_plus(
             #origin,
@@ -65,6 +104,17 @@ class AugmentedDataset(Dataset):
             return_attention_mask=True,
             return_tensors='pt',
         )
+    
+        origs_added_features = dict(
+            wordrank_score_orig=wordrank_score_orig,
+            syllables_per_word_orig=syllables_per_word_orig,
+            comp_ratio_orig=comp_ratio_orig,
+            deleted_words_prop_orig=deleted_words_prop_orig,
+            added_words_prop_orig=added_words_prop_orig,
+            reordered_words_prop_orig=reordered_words_prop_orig,
+            edit_sequences_len_orig=edit_sequences_len_orig,
+        )
+        origs_added_features_tensor = torch.tensor([list(origs_added_features.values())])
 
         encoding_simps = self.tokenizer.encode_plus(
             #origin,
@@ -78,19 +128,29 @@ class AugmentedDataset(Dataset):
             return_tensors='pt',
         )
 
+        simps_added_features = dict(
+            wordrank_score=wordrank_score,
+            syllables_per_word=syllables_per_word,
+            comp_ratio=comp_ratio,
+            deleted_words_prop=deleted_words_prop,
+            added_words_prop=added_words_prop,
+            reordered_words_prop=reordered_words_prop,
+            edit_sequences_len=edit_sequences_len,
+        )
+        simps_added_features_tensor = torch.tensor([list(simps_added_features.values())])
+
         return dict(
             origs=dict(
                 input_ids=encoding_origs["input_ids"].flatten(),
                 attention_mask=encoding_origs["attention_mask"].flatten(),
-                #added_features=origs_added_features_tensor.flatten(),
+                added_features=origs_added_features_tensor.flatten(),
             ),
             simps=dict(
                 input_ids=encoding_simps["input_ids"].flatten(),
                 attention_mask=encoding_simps["attention_mask"].flatten(),
-                #added_features=simps_added_features_tensor.flatten(),
+                added_features=simps_added_features_tensor.flatten(),
             ),
             labels=torch.tensor(label),
-            #case_nums=torch.tensor(case_num),
         )
 
 class CreateDataModule(pl.LightningDataModule):
@@ -104,8 +164,21 @@ class CreateDataModule(pl.LightningDataModule):
         #origin_column_name: str = 'origin',
         orig_column_name: str = 'original',
         simp_column_name: str = 'simple',
+        wordrank_score_name: str = 'wordrank_score',
+        wordrank_score_orig_name: str = 'wordrank_score_orig',
+        syllables_per_word_name: str = 'syllables_per_word',
+        syllables_per_word_orig_name: str = 'syllables_per_word_orig',
+        comp_ratio_name: str = 'comp_ratio',
+        deleted_words_prop_name: str = 'deleted_words_prop',
+        added_words_prop_name: str = 'added_words_prop',
+        reordered_words_prop_name: str = 'reordered_words_prop',
+        edit_sequences_len_name: str = 'edit_sequences_len',
+        comp_ratio_orig_name: str = 'comp_ratio_orig',
+        deleted_words_prop_orig_name: str = 'deleted_words_prop_orig',
+        added_words_prop_orig_name: str = 'added_words_prop_orig',
+        reordered_words_prop_orig_name: str = 'reordered_words_prop_orig',
+        edit_sequences_len_orig_name: str = 'edit_sequences_len_orig',
         label_column_name: str = 'label',
-        #case_num_column_name: str = 'case_number',
         pretrained_model='bert-base-uncased',
     ):
         super().__init__()
@@ -117,8 +190,21 @@ class CreateDataModule(pl.LightningDataModule):
         #self.origin_column_name = origin_column_name
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
+        self.wordrank_score_name = wordrank_score_name
+        self.wordrank_score_orig_name = wordrank_score_orig_name
+        self.syllables_per_word_name = syllables_per_word_name
+        self.syllables_per_word_orig_name = syllables_per_word_orig_name
+        self.comp_ratio_name = comp_ratio_name
+        self.deleted_words_prop_name = deleted_words_prop_name
+        self.added_words_prop_name = added_words_prop_name
+        self.reordered_words_prop_name = reordered_words_prop_name
+        self.edit_sequences_len_name = edit_sequences_len_name
+        self.comp_ratio_orig_name = comp_ratio_orig_name
+        self.deleted_words_prop_orig_name = deleted_words_prop_orig_name
+        self.added_words_prop_orig_name = added_words_prop_orig_name
+        self.reordered_words_prop_orig_name = reordered_words_prop_orig_name
+        self.edit_sequences_len_orig_name = edit_sequences_len_orig_name
         self.label_column_name = label_column_name
-        #self.case_num_column_name = case_num_column_name
         self.tokenizer = BertTokenizer.from_pretrained(pretrained_model)
 
     def setup(self, stage):
@@ -130,8 +216,21 @@ class CreateDataModule(pl.LightningDataModule):
               #self.origin_column_name,
               self.orig_column_name,
               self.simp_column_name,
+              self.wordrank_score_name,
+              self.wordrank_score_orig_name,
+              self.syllables_per_word_name,
+              self.syllables_per_word_orig_name,
+              self.comp_ratio_name,
+              self.deleted_words_prop_name,
+              self.added_words_prop_name,
+              self.reordered_words_prop_name,
+              self.edit_sequences_len_name,
+              self.comp_ratio_orig_name,
+              self.deleted_words_prop_orig_name,
+              self.added_words_prop_orig_name,
+              self.reordered_words_prop_orig_name,
+              self.edit_sequences_len_orig_name,
               self.label_column_name,
-              #self.case_num_column_name,
             )
           self.vaild_dataset = AugmentedDataset(
               self.valid_df, 
@@ -140,8 +239,21 @@ class CreateDataModule(pl.LightningDataModule):
               #self.origin_column_name,
               self.orig_column_name,
               self.simp_column_name,
+              self.wordrank_score_name,
+              self.wordrank_score_orig_name,
+              self.syllables_per_word_name,
+              self.syllables_per_word_orig_name,
+              self.comp_ratio_name,
+              self.deleted_words_prop_name,
+              self.added_words_prop_name,
+              self.reordered_words_prop_name,
+              self.edit_sequences_len_name,
+              self.comp_ratio_orig_name,
+              self.deleted_words_prop_orig_name,
+              self.added_words_prop_orig_name,
+              self.reordered_words_prop_orig_name,
+              self.edit_sequences_len_orig_name,
               self.label_column_name,
-              #self.case_num_column_name,
             )
         if stage == "test":
           self.test_dataset = AugmentedDataset(
@@ -151,8 +263,21 @@ class CreateDataModule(pl.LightningDataModule):
               #self.origin_column_name,
               self.orig_column_name,
               self.simp_column_name,
+              self.wordrank_score_name,
+              self.wordrank_score_orig_name,
+              self.syllables_per_word_name,
+              self.syllables_per_word_orig_name,
+              self.comp_ratio_name,
+              self.deleted_words_prop_name,
+              self.added_words_prop_name,
+              self.reordered_words_prop_name,
+              self.edit_sequences_len_name,
+              self.comp_ratio_orig_name,
+              self.deleted_words_prop_orig_name,
+              self.added_words_prop_orig_name,
+              self.reordered_words_prop_orig_name,
+              self.edit_sequences_len_orig_name,
               self.label_column_name,
-              #self.case_num_column_name,
             )
 
     def train_dataloader(self):
@@ -212,35 +337,37 @@ class BertRanker(pl.LightningModule):
         for param in self.classifier.parameters():
             param.requires_grad = True
 
-    def forward(self, input_ids, attention_mask):
+    def forward(self, input_ids, attention_mask, added_features):
         output = self.bert(input_ids, attention_mask=attention_mask)
         if self.pooling_type == 'cls':
             cls = output.pooler_output
-            #output = torch.cat([added_features.float(), cls], dim=1)
-            preds = self.classifier(cls)
+            output = torch.cat([added_features.float(), cls], dim=1)
+            preds = self.classifier(output)
         if self.pooling_type == 'cls_meanpooled':
             cls = output.pooler_output
             cls_meanpooled = torch.unsqueeze(torch.mean(output.pooler_output, dim=1), 1)
             #print(cls_meanpooled.size())
             #print(added_features.float().size())
-            #output = torch.cat([added_features.float(), cls_meanpooled], dim=1)
-            preds = self.classifier(cls_meanpooled)
+            output = torch.cat([added_features.float(), cls_meanpooled], dim=1)
+            preds = self.classifier(output)
         if self.pooling_type == 'max':
             mp = output.last_hidden_state.max(1)[0]
-            #output = torch.cat([added_features.float(), mp], dim=1)
-            preds = self.classifier(mp)
+            output = torch.cat([added_features.float(), mp], dim=1)
+            preds = self.classifier(output)
         if self.pooling_type == '4_cls':
             clses = torch.cat([output.hidden_states[-1*i][:,0] for i in range(1, 4+1)], dim=1)
-            #output = torch.cat([added_features.float(), clses], dim=1)
-            preds = self.classifier(clses)
+            output = torch.cat([added_features.float(), clses], dim=1)
+            preds = self.classifier(output)
         preds = torch.flatten(preds)
         return preds, output
       
     def training_step(self, batch, batch_idx):
         orig_preds, output = self.forward(input_ids=batch["origs"]["input_ids"],
-                                    attention_mask=batch["origs"]["attention_mask"])
+                                    attention_mask=batch["origs"]["attention_mask"],
+                                    added_features=batch["origs"]["added_features"])
         simp_preds, output = self.forward(input_ids=batch["simps"]["input_ids"],
-                                    attention_mask=batch["simps"]["attention_mask"])
+                                    attention_mask=batch["simps"]["attention_mask"],
+                                    added_features=batch["simps"]["added_features"])
         loss = self.criterion(simp_preds, orig_preds, batch["labels"])
         return {'loss': loss,
                 'batch_preds': [orig_preds, simp_preds],
@@ -248,9 +375,11 @@ class BertRanker(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         orig_preds, output = self.forward(input_ids=batch["origs"]["input_ids"],
-                                    attention_mask=batch["origs"]["attention_mask"])
+                                    attention_mask=batch["origs"]["attention_mask"],
+                                    added_features=batch["origs"]["added_features"])
         simp_preds, output = self.forward(input_ids=batch["simps"]["input_ids"],
-                                    attention_mask=batch["simps"]["attention_mask"])
+                                    attention_mask=batch["simps"]["attention_mask"],
+                                    added_features=batch["simps"]["added_features"])
         loss = self.criterion(simp_preds, orig_preds, batch["labels"])
         return {'loss': loss,
                 'batch_preds': [orig_preds, simp_preds],
@@ -258,9 +387,11 @@ class BertRanker(pl.LightningModule):
 
     def test_step(self, batch, batch_idx):
         orig_preds, output = self.forward(input_ids=batch["origs"]["input_ids"],
-                                    attention_mask=batch["origs"]["attention_mask"])
+                                    attention_mask=batch["origs"]["attention_mask"],
+                                    added_features=batch["origs"]["added_features"])
         simp_preds, output = self.forward(input_ids=batch["simps"]["input_ids"],
-                                    attention_mask=batch["simps"]["attention_mask"])
+                                    attention_mask=batch["simps"]["attention_mask"],
+                                    added_features=batch["simps"]["added_features"])
         loss = self.criterion(simp_preds, orig_preds, batch["labels"])
         return {'loss': loss,
                 'batch_preds': [orig_preds, simp_preds],
@@ -292,7 +423,7 @@ class BertRanker(pl.LightningModule):
         return self.validation_epoch_end(outputs, "test")
 
     def configure_optimizers(self):
-        return optim.AdamW(self.parameters(), lr=self.lr)
+        return optim.Adam(self.parameters(), lr=self.lr)
 
 def make_callbacks(min_delta, patience, checkpoint_path):
 
