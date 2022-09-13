@@ -423,7 +423,7 @@ class BertRanker(pl.LightningModule):
         return self.validation_epoch_end(outputs, "test")
 
     def configure_optimizers(self):
-        return optim.Adam(self.parameters(), lr=self.lr)
+        return optim.AdamW(self.parameters(), lr=self.lr)
 
 def make_callbacks(min_delta, patience, checkpoint_path):
 
