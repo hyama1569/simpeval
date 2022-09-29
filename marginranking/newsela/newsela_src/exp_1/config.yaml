@@ -18,6 +18,10 @@ path:
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_addfeatures_no_aug.pickle
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_addfeatures_50.pickle
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_addfeatures_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_swor_addfeatures_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_swor_addfeatures_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_swor_addfeatures_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_swor_addfeatures_100.pickle
   checkpoint_path: checkpoints
 model:
   n_classes: 1

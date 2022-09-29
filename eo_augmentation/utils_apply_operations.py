@@ -213,3 +213,4 @@ def apply_edit_sequences_sampling_without_replacement(edit_sequences, sent1_toks
         else:
             applied_edit_sequences_all.append([])
             applied_sentences_all.append([])
+    return applied_sentences_all, applied_edit_sequences_all
