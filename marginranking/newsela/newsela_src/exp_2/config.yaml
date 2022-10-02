@@ -33,7 +33,7 @@ model:
   #pooling_type: cls_meanpooled
   #pooling_type: max
   #pooling_type: 4_cls
-  added_feature_num: 0
+  added_feature_num: 7
 training:
   pl_seed: 1
   test_size: 0.3
