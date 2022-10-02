@@ -21,7 +21,7 @@ python -m spacy download en_core_web_sm
 #50
 #wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-CcMIlPD08XccIzMl8njYaP1R5aCAz-_' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-CcMIlPD08XccIzMl8njYaP1R5aCAz-_" -O newsela_3more_dataframe_addfeatures_50.pickle && rm -rf /tmp/cookies.txt
 #25
-wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-IRjO93Z2qlbskiO_swjqsktjtnTOnSj' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-IRjO93Z2qlbskiO_swjqsktjtnTOnSj" -O newsela_3more_dataframe_addfeatures_25.pickle && rm -rf /tmp/cookies.txt
+#wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-IRjO93Z2qlbskiO_swjqsktjtnTOnSj' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-IRjO93Z2qlbskiO_swjqsktjtnTOnSj" -O newsela_3more_dataframe_addfeatures_25.pickle && rm -rf /tmp/cookies.txt
 
 ##newsela_dataframe_addfeatures_max_cnt_2
 #100
@@ -31,7 +31,7 @@ wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=downloa
 #50
 #wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-OvHYB0MzQboJnV0HSHB_lk6oQygQDyL' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-OvHYB0MzQboJnV0HSHB_lk6oQygQDyL" -O newsela_3more_dataframe_addfeatures_max_cnt_2_50.pickle && rm -rf /tmp/cookies.txt
 #25
-wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-OxK5BV1TSh-1B_ZKKFaR7cP8vLzKtDz' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-OxK5BV1TSh-1B_ZKKFaR7cP8vLzKtDz" -O newsela_3more_dataframe_addfeatures_max_cnt_2_25.pickle && rm -rf /tmp/cookies.txt
+#wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-OxK5BV1TSh-1B_ZKKFaR7cP8vLzKtDz' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-OxK5BV1TSh-1B_ZKKFaR7cP8vLzKtDz" -O newsela_3more_dataframe_addfeatures_max_cnt_2_25.pickle && rm -rf /tmp/cookies.txt
 
 ##newsela_dataframe_addfeatures_max_cnt_3
 #100
@@ -41,7 +41,7 @@ wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=downloa
 #50
 #wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-Xs_jKMTbiO0j_n8GS1vBJYwMMZBLOKp' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-Xs_jKMTbiO0j_n8GS1vBJYwMMZBLOKp" -O newsela_3more_dataframe_addfeatures_max_cnt_3_50.pickle && rm -rf /tmp/cookies.txt
 #25
-wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-ZK06zCIGH8_ZlkMZ3u0X_r5QdU6li6-' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-ZK06zCIGH8_ZlkMZ3u0X_r5QdU6li6-" -O newsela_3more_dataframe_addfeatures_max_cnt_3_25.pickle && rm -rf /tmp/cookies.txt
+#wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-ZK06zCIGH8_ZlkMZ3u0X_r5QdU6li6-' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-ZK06zCIGH8_ZlkMZ3u0X_r5QdU6li6-" -O newsela_3more_dataframe_addfeatures_max_cnt_3_25.pickle && rm -rf /tmp/cookies.txt
 
 ##newsela_only_addfeatures
 #100
@@ -49,7 +49,18 @@ wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=downloa
 #50
 #wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1--MPOBYVkfcacsy6luIXGhHtgi5SEnli' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1--MPOBYVkfcacsy6luIXGhHtgi5SEnli" -O newsela_only_addfeatures_50.pickle && rm -rf /tmp/cookies.txt
 #no_aug
-wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1zYNv9Kp_6uHA8wErXbwkmLeWZcKYvayY' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1zYNv9Kp_6uHA8wErXbwkmLeWZcKYvayY" -O newsela_only_addfeatures_no_aug.pickle && rm -rf /tmp/cookies.txt
+#wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1zYNv9Kp_6uHA8wErXbwkmLeWZcKYvayY' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1zYNv9Kp_6uHA8wErXbwkmLeWZcKYvayY" -O newsela_only_addfeatures_no_aug.pickle && rm -rf /tmp/cookies.txt
+
+##newsela_dataframe_swor_addfeatures
+#100
+wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-D8ST-OSumeREfGX8FIz2hvhHAGB_lAX' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-D8ST-OSumeREfGX8FIz2hvhHAGB_lAX" -O newsela_3more_dataframe_swor_addfeatures_100.pickle && rm -rf /tmp/cookies.txt
+#75
+wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-CZwvgi09qk5sJUWT-zllEUsGBJV1lK0' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-CZwvgi09qk5sJUWT-zllEUsGBJV1lK0" -O newsela_3more_dataframe_swor_addfeatures_75.pickle && rm -rf /tmp/cookies.txt
+#50
+wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1-5MMiHpicz6d09QT0YZwZqgnG7g9PhOV' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1-5MMiHpicz6d09QT0YZwZqgnG7g9PhOV" -O newsela_3more_dataframe_swor_addfeatures_50.pickle && rm -rf /tmp/cookies.txt
+#25
+wget --load-cookies /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/uc?export=download&id=1zog4clGr94aZBIZnPd6ksPjWBsSoLvGC' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1zog4clGr94aZBIZnPd6ksPjWBsSoLvGC" -O newsela_3more_dataframe_swor_addfeatures_25.pickle && rm -rf /tmp/cookies.txt
+
 
 #move files
 mv n* ../../data
