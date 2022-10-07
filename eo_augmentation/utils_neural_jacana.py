@@ -20,7 +20,7 @@ class data_example:
 def preprocess_texts(texts):
     tokenized_texts = []
     for text in texts:
-        text = re.sub(r'[\(\)\`\'\"\:\;]', '', text)
+        text = re.sub(r'[\(\)\`\'\"\:\;\,]', '', text)
         text = re.sub(r'-RRB-', '', text)
         text = re.sub(r'-LRB-', '', text)
         text = re.sub(r'DEL', 'del', text)
