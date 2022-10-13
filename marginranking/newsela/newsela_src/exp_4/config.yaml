@@ -1,0 +1,68 @@
+wandb:
+  project: newsela_v4_exp1_p2
+  exp_num: 1
+  tags: [bert]
+path:
+  #exp1
+  ##25% (exp_num=1)
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext1_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext2_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext3_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext4_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext5_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext6_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext7_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext8_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext9_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext10_25.pickle
+  ##50% (exp_num=2)
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext1_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext2_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext3_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext4_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext5_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext6_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext7_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext8_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext9_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext10_50.pickle
+  ##75% (exp_num=3)
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext1_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext2_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext3_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext4_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext5_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext6_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext7_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext8_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext9_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_ext10_75.pickle
+  ##100% (exp_num=4)
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_100.pickle
+
+  #exp_2
+
+  checkpoint_path: checkpoints
+model:
+  n_classes: 1
+  n_linears: 1
+  d_hidden_linear: 128
+  dropout_rate: 0.2
+  max_token_len: 512
+  pooling_type: cls
+  #pooling_type: cls_meanpooled
+  #pooling_type: max
+  #pooling_type: 4_cls
+  added_feature_num: 0
+training:
+  pl_seed: 1
+  test_size: 0.3
+  valid_size: 0.3
+  n_epochs: 10
+  batch_size: 16
+  learning_rate: 0.0001
+  n_gpus: 1
+
+callbacks:
+  patience: 5
+  patience_min_delta: 0
