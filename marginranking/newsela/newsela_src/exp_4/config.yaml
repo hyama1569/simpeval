@@ -67,15 +67,15 @@ path:
   #exp_2 (100%)
   ##aug_50
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo1_ag1_aug50_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo2_ag12_aug50_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo3_ag13_aug50_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo4_ag14_aug50_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo5_ag15_aug50_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo6_ag16_aug50_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo7_ag17_aug50_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo8_ag18_aug50_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo9_ag19_aug50_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo10_ag20_aug50_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo2_ag2_aug50_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo3_ag3_aug50_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo4_ag4_aug50_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo5_ag5_aug50_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo6_ag6_aug50_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo7_ag7_aug50_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo8_ag8_aug50_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo9_ag9_aug50_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo10_ag10_aug50_100.pickle
   ##aug_100
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo1_aug100_100.pickle
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_3more_dataframe_eo2_aug100_100.pickle
