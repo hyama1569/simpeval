@@ -8,7 +8,8 @@ pip install transformers
 #pip install -U pip setuptools wheel
 #pip install setuptools==59.5.0
 #pip install -U spacy
-pip install git+https://github.com/PyTorchLightning/pytorch-lightning
+#pip install git+https://github.com/PyTorchLightning/pytorch-lightning
+pip install pytorch-lightning
 pip install hydra-core --upgrade
 python -m spacy download en_core_web_sm
 #pip install torch==1.9+cu111  -f https://download.pytorch.org/whl/torch_stable.html
