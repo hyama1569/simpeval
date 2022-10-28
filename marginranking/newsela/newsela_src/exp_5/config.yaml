@@ -1,5 +1,5 @@
 wandb:
-  project: newsela_v4_addfeatures_exp1_p2
+  project: newsela_v4_addfeatures_exp2_p2
   exp_num: 1
   tags: [bert]
 path:
