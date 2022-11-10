@@ -298,17 +298,62 @@ class BertRanker(pl.LightningModule):
                     }
     
     def validation_step(self, batch, batch_idx):
-        return self.training_step(batch, batch_idx)
+        #if selected batch with can_aug == 1
+        if batch["can_aug"].any():
+            orig_orig_preds, _ = self.forward(input_ids=batch["orig_orig"]["input_ids"], attention_mask=batch["orig_orig"]["attention_mask"])
+            orig_simp_preds, _ = self.forward(input_ids=batch["orig_simp"]["input_ids"], attention_mask=batch["orig_simp"]["attention_mask"])
+            simp_simp_preds, _ = self.forward(input_ids=batch["simp_simp"]["input_ids"], attention_mask=batch["simp_simp"]["attention_mask"])
+            orig_inter_preds, _ = self.forward(input_ids=batch["orig_inter"]["input_ids"], attention_mask=batch["orig_inter"]["attention_mask"])
+            inter_simp_preds, _ = self.forward(input_ids=batch["inter_simp"]["input_ids"], attention_mask=batch["inter_simp"]["attention_mask"])
+            inter_inter_preds, _ = self.forward(input_ids=batch["inter_inter"]["input_ids"], attention_mask=batch["inter_inter"]["attention_mask"])
+
+            loss = 0
+            # w/o aug margin loss
+            loss += self.criterion(orig_simp_preds, orig_orig_preds, batch["labels"])
+            loss += self.criterion(orig_simp_preds, simp_simp_preds, batch["labels"])
+            # w/ aug margin loss
+            loss += self.criterion(orig_inter_preds, orig_orig_preds, batch["labels"])
+            loss += self.criterion(orig_inter_preds, inter_inter_preds, batch["labels"])
+            loss += self.criterion(orig_inter_preds, simp_simp_preds, batch["labels"])
+            loss += self.criterion(inter_simp_preds, orig_orig_preds, batch["labels"])
+            loss += self.criterion(inter_simp_preds, inter_inter_preds, batch["labels"])
+            loss += self.criterion(inter_simp_preds, simp_simp_preds, batch["labels"])
+            loss += self.criterion(orig_simp_preds, orig_inter_preds, batch["labels"])
+            loss += self.criterion(orig_simp_preds, inter_simp_preds, batch["labels"])
+            loss /= 10
+
+            return {'loss': loss, 
+                    'batch_preds': [orig_orig_preds, orig_simp_preds, simp_simp_preds, orig_inter_preds, inter_simp_preds, inter_inter_preds],
+                    'batch_labels': batch["labels"],
+                    'batch_can_aug': batch["can_aug"],
+                    }
+        else:
+            orig_orig_preds, _ = self.forward(input_ids=batch["orig_orig"]["input_ids"], attention_mask=batch["orig_orig"]["attention_mask"])
+            orig_simp_preds, _ = self.forward(input_ids=batch["orig_simp"]["input_ids"], attention_mask=batch["orig_simp"]["attention_mask"])
+            simp_simp_preds, _ = self.forward(input_ids=batch["simp_simp"]["input_ids"], attention_mask=batch["simp_simp"]["attention_mask"])
+
+            loss = 0
+            # w/o aug margin loss
+            loss += self.criterion(orig_simp_preds, orig_orig_preds, batch["labels"])
+            loss += self.criterion(orig_simp_preds, simp_simp_preds, batch["labels"])
+            loss /= 2
+
+            return {'loss': loss, 
+                    'batch_preds': [orig_orig_preds, orig_simp_preds, simp_simp_preds],
+                    'batch_labels': batch["labels"],
+                    'batch_can_aug': batch["can_aug"],
+                    }
 
     def test_step(self, batch, batch_idx):
         return self.training_step(batch, batch_idx)
     
     def training_epoch_end(self, outputs, mode="train"):
-        epoch_loss = torch.stack([x["loss"] for x in outputs]).mean()
+        epoch_loss = torch.stack([x["loss"] for x in outputs]).mean().item()
         self.log(f"{mode}_loss", epoch_loss, logger=True)
 
-    def validation_epoch_end(self, outputs):
-        return self.training_epoch_end(outputs, "val")
+    def validation_epoch_end(self, outputs, mode="val"):
+        epoch_loss = torch.stack([x["loss"] for x in outputs]).mean().item()
+        self.log(f"{mode}_loss", epoch_loss, logger=True)
 
     def test_epoch_end(self, outputs):
         return self.training_epoch_end(outputs, "test")

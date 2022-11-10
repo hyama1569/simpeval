@@ -97,7 +97,7 @@ model:
   max_token_len: 512
   pooling_type: cls
   #pooling_type: cls_meanpooled
-  #pooling_type: max
+  #pooling_type: max 
   #pooling_type: 4_cls
   added_feature_num: 7
 training:
