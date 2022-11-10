@@ -78,63 +78,26 @@ class AugmentedDataset(Dataset):
         case_num = data_row[self.case_num_column_name]
         can_aug = data_row[self.can_aug_column_name]
 
-        if can_aug == 0:
-            enc_orig_orig = self.tokenizer.encode_plus(orig, orig, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-            enc_orig_simp = self.tokenizer.encode_plus(orig, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-            enc_simp_simp = self.tokenizer.encode_plus(simp, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-            return dict(
-                orig_orig=dict(
-                    input_ids=enc_orig_orig["input_ids"].flatten(),
-                    attention_mask=enc_orig_orig["attention_mask"].flatten(),
-                ),
-                orig_simp=dict(
-                    input_ids=enc_orig_simp["input_ids"].flatten(),
-                    attention_mask=enc_orig_simp["attention_mask"].flatten(),
-                ),
-                simp_simp=dict(
-                    input_ids=enc_simp_simp["input_ids"].flatten(),
-                    attention_mask=enc_simp_simp["attention_mask"].flatten(),
-                ),
-                labels=torch.tensor(label),
-                case_nums=torch.tensor(case_num),
-                can_aug=can_aug,
-            )
-        elif can_aug == 1:
-            enc_orig_orig = self.tokenizer.encode_plus(orig, orig, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-            enc_orig_simp = self.tokenizer.encode_plus(orig, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-            enc_simp_simp = self.tokenizer.encode_plus(simp, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-            enc_orig_inter = self.tokenizer.encode_plus(orig, inter, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-            enc_inter_simp = self.tokenizer.encode_plus(inter, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-            enc_inter_inter = self.tokenizer.encode_plus(inter, inter, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-            return dict(
-                orig_orig=dict(
-                    input_ids=enc_orig_orig["input_ids"].flatten(),
-                    attention_mask=enc_orig_orig["attention_mask"].flatten(),
-                ),
-                orig_simp=dict(
-                    input_ids=enc_orig_simp["input_ids"].flatten(),
-                    attention_mask=enc_orig_simp["attention_mask"].flatten(),
-                ),
-                simp_simp=dict(
-                    input_ids=enc_simp_simp["input_ids"].flatten(),
-                    attention_mask=enc_simp_simp["attention_mask"].flatten(),
-                ),
-                orig_inter=dict(
-                    input_ids=enc_orig_inter["input_ids"].flatten(),
-                    attention_mask=enc_orig_inter["attention_mask"].flatten(),
-                ),
-                inter_simp=dict(
-                    input_ids=enc_inter_simp["input_ids"].flatten(),
-                    attention_mask=enc_inter_simp["attention_mask"].flatten(),
-                ),
-                inter_inter=dict(
-                    input_ids=enc_inter_inter["input_ids"].flatten(),
-                    attention_mask=enc_inter_inter["attention_mask"].flatten(),
-                ),
-                labels=torch.tensor(label),
-                case_nums=torch.tensor(case_num),
-                can_aug=can_aug,
-            )
+        enc_orig_orig = self.tokenizer.encode_plus(orig, orig, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
+        enc_orig_simp = self.tokenizer.encode_plus(orig, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
+        enc_simp_simp = self.tokenizer.encode_plus(simp, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
+        return dict(
+            orig_orig=dict(
+                input_ids=enc_orig_orig["input_ids"].flatten(),
+                attention_mask=enc_orig_orig["attention_mask"].flatten(),
+            ),
+            orig_simp=dict(
+                input_ids=enc_orig_simp["input_ids"].flatten(),
+                attention_mask=enc_orig_simp["attention_mask"].flatten(),
+            ),
+            #simp_simp=dict(
+            #    input_ids=enc_simp_simp["input_ids"].flatten(),
+            #    attention_mask=enc_simp_simp["attention_mask"].flatten(),
+            #),
+            labels=torch.tensor(label),
+            case_nums=torch.tensor(case_num),
+            can_aug=can_aug,
+        )
 
 class CreateDataModule(pl.LightningDataModule):
     def __init__(
@@ -251,51 +214,21 @@ class BertRanker(pl.LightningModule):
         return preds, output
 
     def training_step(self, batch, batch_idx):
-        #if selected batch with can_aug == 1
-        if batch["can_aug"].any():
-            orig_orig_preds, _ = self.forward(input_ids=batch["orig_orig"]["input_ids"], attention_mask=batch["orig_orig"]["attention_mask"])
-            orig_simp_preds, _ = self.forward(input_ids=batch["orig_simp"]["input_ids"], attention_mask=batch["orig_simp"]["attention_mask"])
-            simp_simp_preds, _ = self.forward(input_ids=batch["simp_simp"]["input_ids"], attention_mask=batch["simp_simp"]["attention_mask"])
-            orig_inter_preds, _ = self.forward(input_ids=batch["orig_inter"]["input_ids"], attention_mask=batch["orig_inter"]["attention_mask"])
-            inter_simp_preds, _ = self.forward(input_ids=batch["inter_simp"]["input_ids"], attention_mask=batch["inter_simp"]["attention_mask"])
-            inter_inter_preds, _ = self.forward(input_ids=batch["inter_inter"]["input_ids"], attention_mask=batch["inter_inter"]["attention_mask"])
+        orig_orig_preds, _ = self.forward(input_ids=batch["orig_orig"]["input_ids"], attention_mask=batch["orig_orig"]["attention_mask"])
+        orig_simp_preds, _ = self.forward(input_ids=batch["orig_simp"]["input_ids"], attention_mask=batch["orig_simp"]["attention_mask"])
+        #simp_simp_preds, _ = self.forward(input_ids=batch["simp_simp"]["input_ids"], attention_mask=batch["simp_simp"]["attention_mask"])
 
-            loss = 0
-            # w/o aug margin loss
-            loss += self.criterion(orig_simp_preds, orig_orig_preds, batch["labels"])
-            loss += self.criterion(orig_simp_preds, simp_simp_preds, batch["labels"])
-            # w/ aug margin loss
-            loss += self.criterion(orig_inter_preds, orig_orig_preds, batch["labels"])
-            loss += self.criterion(orig_inter_preds, inter_inter_preds, batch["labels"])
-            loss += self.criterion(orig_inter_preds, simp_simp_preds, batch["labels"])
-            loss += self.criterion(inter_simp_preds, orig_orig_preds, batch["labels"])
-            loss += self.criterion(inter_simp_preds, inter_inter_preds, batch["labels"])
-            loss += self.criterion(inter_simp_preds, simp_simp_preds, batch["labels"])
-            loss += self.criterion(orig_simp_preds, orig_inter_preds, batch["labels"])
-            loss += self.criterion(orig_simp_preds, inter_simp_preds, batch["labels"])
-            loss /= 10
+        #loss = 0
+        # w/o aug margin loss
+        loss = self.criterion(orig_simp_preds, orig_orig_preds, batch["labels"])
+        #loss += self.criterion(orig_simp_preds, simp_simp_preds, batch["labels"])
+        #loss /= 2
 
-            return {'loss': loss, 
-                    'batch_preds': [orig_orig_preds, orig_simp_preds, simp_simp_preds, orig_inter_preds, inter_simp_preds, inter_inter_preds],
-                    'batch_labels': batch["labels"],
-                    'batch_can_aug': batch["can_aug"],
-                    }
-        else:
-            orig_orig_preds, _ = self.forward(input_ids=batch["orig_orig"]["input_ids"], attention_mask=batch["orig_orig"]["attention_mask"])
-            orig_simp_preds, _ = self.forward(input_ids=batch["orig_simp"]["input_ids"], attention_mask=batch["orig_simp"]["attention_mask"])
-            simp_simp_preds, _ = self.forward(input_ids=batch["simp_simp"]["input_ids"], attention_mask=batch["simp_simp"]["attention_mask"])
-
-            loss = 0
-            # w/o aug margin loss
-            loss += self.criterion(orig_simp_preds, orig_orig_preds, batch["labels"])
-            loss += self.criterion(orig_simp_preds, simp_simp_preds, batch["labels"])
-            loss /= 2
-
-            return {'loss': loss, 
-                    'batch_preds': [orig_orig_preds, orig_simp_preds, simp_simp_preds],
-                    'batch_labels': batch["labels"],
-                    'batch_can_aug': batch["can_aug"],
-                    }
+        return {'loss': loss, 
+                'batch_preds': [orig_orig_preds, orig_simp_preds],
+                'batch_labels': batch["labels"],
+                'batch_can_aug': batch["can_aug"],
+                }
     
     def validation_step(self, batch, batch_idx):
         return self.training_step(batch, batch_idx)
@@ -304,41 +237,17 @@ class BertRanker(pl.LightningModule):
         return self.training_step(batch, batch_idx)
     
     def training_epoch_end(self, outputs, mode="train"):
-        epoch_loss = 0
-
-        #w/o aug margin loss
-        epoch_woaug_orig_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs if x['batch_can_aug'][0].item() == 0])
-        epoch_woaug_orig_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs if x['batch_can_aug'][0].item() == 0])
-        epoch_woaug_simp_simp_preds = torch.cat([x['batch_preds'][2] for x in outputs if x['batch_can_aug'][0].item() == 0])
-        epoch_woaug_labels = torch.cat([x['batch_labels'] for x in outputs if x['batch_can_aug'][0].item() == 0])
-        epoch_loss += self.criterion(epoch_woaug_orig_simp_preds, epoch_woaug_orig_orig_preds, epoch_woaug_labels)
-        epoch_loss += self.criterion(epoch_woaug_orig_simp_preds, epoch_woaug_simp_simp_preds, epoch_woaug_labels)
-
-        #w/ aug margin loss
-        epoch_waug_orig_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs if x['batch_can_aug'][0].item() == 1])
-        epoch_waug_orig_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs if x['batch_can_aug'][0].item() == 1])
-        epoch_waug_simp_simp_preds = torch.cat([x['batch_preds'][2] for x in outputs if x['batch_can_aug'][0].item() == 1])
-        epoch_waug_orig_inter_preds = torch.cat([x['batch_preds'][3] for x in outputs if x['batch_can_aug'][0].item() == 1])
-        epoch_waug_inter_simp_preds = torch.cat([x['batch_preds'][4] for x in outputs if x['batch_can_aug'][0].item() == 1])
-        epoch_waug_inter_inter_preds = torch.cat([x['batch_preds'][5] for x in outputs if x['batch_can_aug'][0].item() == 1])
-        epoch_waug_labels = torch.cat([x['batch_labels'] for x in outputs if x['batch_can_aug'][0].item() == 1])
-        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_orig_orig_preds, epoch_waug_labels)
-        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_simp_simp_preds, epoch_waug_labels)
-        epoch_loss += self.criterion(epoch_waug_orig_inter_preds, epoch_waug_orig_orig_preds, epoch_waug_labels)
-        epoch_loss += self.criterion(epoch_waug_orig_inter_preds, epoch_waug_simp_simp_preds, epoch_waug_labels)
-        epoch_loss += self.criterion(epoch_waug_orig_inter_preds, epoch_waug_inter_inter_preds, epoch_waug_labels)
-        epoch_loss += self.criterion(epoch_waug_inter_simp_preds, epoch_waug_orig_orig_preds, epoch_waug_labels)
-        epoch_loss += self.criterion(epoch_waug_inter_simp_preds, epoch_waug_simp_simp_preds, epoch_waug_labels)
-        epoch_loss += self.criterion(epoch_waug_inter_simp_preds, epoch_waug_inter_inter_preds, epoch_waug_labels)
-        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_orig_inter_preds, epoch_waug_labels)
-        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_inter_simp_preds, epoch_waug_labels)
+        epoch_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs])
+        epoch_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs])
+        epoch_labels = torch.cat([x['batch_labels'] for x in outputs])
+        epoch_loss = self.criterion(epoch_simp_preds, epoch_orig_preds, epoch_labels)
         self.log(f"{mode}_loss", epoch_loss, logger=True)
 
     def validation_epoch_end(self, outputs, mode="val"):
-        return self.training_epoch_end(outputs, "val")
+        return self.training_epoch_end(outputs, mode)
 
-    def test_epoch_end(self, outputs):
-        return self.training_epoch_end(outputs, "test")
+    def test_epoch_end(self, outputs, mode="test"):
+        return self.training_epoch_end(outputs, mode)
 
     def configure_optimizers(self):
         return optim.AdamW(self.parameters(), lr=self.lr)
