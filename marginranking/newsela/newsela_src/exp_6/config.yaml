@@ -72,5 +72,5 @@ training:
   n_gpus: 1
 
 callbacks:
-  patience: 5
+  patience: 3
   patience_min_delta: 0
