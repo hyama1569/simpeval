@@ -298,62 +298,44 @@ class BertRanker(pl.LightningModule):
                     }
     
     def validation_step(self, batch, batch_idx):
-        #if selected batch with can_aug == 1
-        if batch["can_aug"].any():
-            orig_orig_preds, _ = self.forward(input_ids=batch["orig_orig"]["input_ids"], attention_mask=batch["orig_orig"]["attention_mask"])
-            orig_simp_preds, _ = self.forward(input_ids=batch["orig_simp"]["input_ids"], attention_mask=batch["orig_simp"]["attention_mask"])
-            simp_simp_preds, _ = self.forward(input_ids=batch["simp_simp"]["input_ids"], attention_mask=batch["simp_simp"]["attention_mask"])
-            orig_inter_preds, _ = self.forward(input_ids=batch["orig_inter"]["input_ids"], attention_mask=batch["orig_inter"]["attention_mask"])
-            inter_simp_preds, _ = self.forward(input_ids=batch["inter_simp"]["input_ids"], attention_mask=batch["inter_simp"]["attention_mask"])
-            inter_inter_preds, _ = self.forward(input_ids=batch["inter_inter"]["input_ids"], attention_mask=batch["inter_inter"]["attention_mask"])
-
-            loss = 0
-            # w/o aug margin loss
-            loss += self.criterion(orig_simp_preds, orig_orig_preds, batch["labels"])
-            loss += self.criterion(orig_simp_preds, simp_simp_preds, batch["labels"])
-            # w/ aug margin loss
-            loss += self.criterion(orig_inter_preds, orig_orig_preds, batch["labels"])
-            loss += self.criterion(orig_inter_preds, inter_inter_preds, batch["labels"])
-            loss += self.criterion(orig_inter_preds, simp_simp_preds, batch["labels"])
-            loss += self.criterion(inter_simp_preds, orig_orig_preds, batch["labels"])
-            loss += self.criterion(inter_simp_preds, inter_inter_preds, batch["labels"])
-            loss += self.criterion(inter_simp_preds, simp_simp_preds, batch["labels"])
-            loss += self.criterion(orig_simp_preds, orig_inter_preds, batch["labels"])
-            loss += self.criterion(orig_simp_preds, inter_simp_preds, batch["labels"])
-            loss /= 10
-
-            return {'loss': loss, 
-                    'batch_preds': [orig_orig_preds, orig_simp_preds, simp_simp_preds, orig_inter_preds, inter_simp_preds, inter_inter_preds],
-                    'batch_labels': batch["labels"],
-                    'batch_can_aug': batch["can_aug"],
-                    }
-        else:
-            orig_orig_preds, _ = self.forward(input_ids=batch["orig_orig"]["input_ids"], attention_mask=batch["orig_orig"]["attention_mask"])
-            orig_simp_preds, _ = self.forward(input_ids=batch["orig_simp"]["input_ids"], attention_mask=batch["orig_simp"]["attention_mask"])
-            simp_simp_preds, _ = self.forward(input_ids=batch["simp_simp"]["input_ids"], attention_mask=batch["simp_simp"]["attention_mask"])
-
-            loss = 0
-            # w/o aug margin loss
-            loss += self.criterion(orig_simp_preds, orig_orig_preds, batch["labels"])
-            loss += self.criterion(orig_simp_preds, simp_simp_preds, batch["labels"])
-            loss /= 2
-
-            return {'loss': loss, 
-                    'batch_preds': [orig_orig_preds, orig_simp_preds, simp_simp_preds],
-                    'batch_labels': batch["labels"],
-                    'batch_can_aug': batch["can_aug"],
-                    }
+        return self.training_step(batch, batch_idx)
 
     def test_step(self, batch, batch_idx):
         return self.training_step(batch, batch_idx)
     
     def training_epoch_end(self, outputs, mode="train"):
-        epoch_loss = torch.stack([x["loss"] for x in outputs]).mean().item()
+        epoch_loss = 0
+
+        #w/o aug margin loss
+        epoch_woaug_orig_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs if x['batch_can_aug'] == 0])
+        epoch_woaug_orig_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs if x['batch_can_aug'] == 0])
+        epoch_woaug_simp_simp_preds = torch.cat([x['batch_preds'][2] for x in outputs if x['batch_can_aug'] == 0])
+        epoch_woaug_labels = torch.cat([x['batch_labels'] for x in outputs if x['batch_can_aug'] == 0])
+        epoch_loss += self.criterion(epoch_woaug_orig_simp_preds, epoch_woaug_orig_orig_preds, epoch_woaug_labels)
+        epoch_loss += self.criterion(epoch_woaug_orig_simp_preds, epoch_woaug_simp_simp_preds, epoch_woaug_labels)
+
+        #w/ aug margin loss
+        epoch_waug_orig_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs if x['batch_can_aug'] == 1])
+        epoch_waug_orig_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs if x['batch_can_aug'] == 1])
+        epoch_waug_simp_simp_preds = torch.cat([x['batch_preds'][2] for x in outputs if x['batch_can_aug'] == 1])
+        epoch_waug_orig_inter_preds = torch.cat([x['batch_preds'][3] for x in outputs if x['batch_can_aug'] == 1])
+        epoch_waug_inter_simp_preds = torch.cat([x['batch_preds'][4] for x in outputs if x['batch_can_aug'] == 1])
+        epoch_waug_inter_inter_preds = torch.cat([x['batch_preds'][5] for x in outputs if x['batch_can_aug'] == 1])
+        epoch_waug_labels = torch.cat([x['batch_labels'] for x in outputs if x['batch_can_aug'] == 1])
+        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_orig_orig_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_simp_simp_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_inter_preds, epoch_waug_orig_orig_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_inter_preds, epoch_waug_simp_simp_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_inter_preds, epoch_waug_inter_inter_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_inter_simp_preds, epoch_waug_orig_orig_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_inter_simp_preds, epoch_waug_simp_simp_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_inter_simp_preds, epoch_waug_inter_inter_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_orig_inter_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_inter_simp_preds, epoch_waug_labels)
         self.log(f"{mode}_loss", epoch_loss, logger=True)
 
     def validation_epoch_end(self, outputs, mode="val"):
-        epoch_loss = torch.stack([x["loss"] for x in outputs]).mean().item()
-        self.log(f"{mode}_loss", epoch_loss, logger=True)
+        return self.training_epoch_end(outputs, "val")
 
     def test_epoch_end(self, outputs):
         return self.training_epoch_end(outputs, "test")
