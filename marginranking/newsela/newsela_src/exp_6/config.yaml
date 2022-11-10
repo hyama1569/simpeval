@@ -58,20 +58,15 @@ path:
   checkpoint_path: checkpoints
 model:
   n_classes: 1
-  n_linears: 1
-  d_hidden_linear: 128
   dropout_rate: 0.2
   max_token_len: 512
   pooling_type: cls
-  #pooling_type: cls_meanpooled
-  #pooling_type: max 
-  #pooling_type: 4_cls
-  added_feature_num: 7
+  added_feature_num: 0
 training:
   pl_seed: 1
   test_size: 0.3
   valid_size: 0.3
-  n_epochs: 10
+  n_epochs: 5
   batch_size: 16
   learning_rate: 0.0001
   n_gpus: 1
