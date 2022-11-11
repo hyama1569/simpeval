@@ -170,13 +170,13 @@ class CreateDataModule(pl.LightningDataModule):
             )
 
     def train_dataloader(self):
-        return DataLoader(self.train_dataset, num_workers=os.cpu_count(), batch_sampler=SelectedClassBatchSampler(self.train_dataset, self.batch_size, can_aug_list=self.can_aug_list_train))
+        return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=os.cpu_count())
 
     def val_dataloader(self):
-        return DataLoader(self.vaild_dataset, num_workers=os.cpu_count(), batch_sampler=SelectedClassBatchSampler(self.train_dataset, self.batch_size, can_aug_list=self.can_aug_list_valid))
+        return DataLoader(self.vaild_dataset, batch_size=self.batch_size, num_workers=os.cpu_count())
 
     def test_dataloader(self):
-        return DataLoader(self.test_dataset, num_workers=os.cpu_count(), batch_sampler=SelectedClassBatchSampler(self.train_dataset, self.batch_size, can_aug_list=self.can_aug_list_test))
+        return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=os.cpu_count())
 
 class BertRanker(pl.LightningModule):
     def __init__(
