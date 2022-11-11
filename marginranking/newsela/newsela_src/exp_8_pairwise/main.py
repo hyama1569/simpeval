@@ -9,39 +9,10 @@ import torch.optim as optim
 from omegaconf import DictConfig
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GroupShuffleSplit
 from torch.utils.data import DataLoader, Dataset
-from torch.utils.data.sampler import BatchSampler
 from transformers import BertModel, BertTokenizer
 
-class SelectedClassBatchSampler(BatchSampler):
-    def __init__(self, dataset, batch_size, can_aug_list):
-        self.labels = torch.LongTensor(can_aug_list)
-        self.labels_set = list(set(self.labels.numpy()))
-        self.label_to_indices = {label: np.where(self.labels.numpy() == label)[0]
-                                    for label in self.labels_set}
-        for l in self.labels_set:
-            np.random.shuffle(self.label_to_indices[l])
-        self.used_label_indices_count = {label: 0 for label in self.labels_set}
-        self.dataset = dataset
-        self.batch_size = batch_size
-    
-    def __iter__(self):
-        while len(self.labels_set) != 0:
-            selected_class = np.random.choice(self.labels_set, 1, replace=False)[0]
-            indices = []
-            start_ind = self.used_label_indices_count[selected_class]
-            end_ind = min(self.used_label_indices_count[selected_class]+self.batch_size, len(self.label_to_indices[selected_class]))
-            indices.extend(
-                self.label_to_indices[selected_class][start_ind:end_ind]
-            )
-            if self.used_label_indices_count[selected_class] + self.batch_size > len(self.label_to_indices[selected_class]):
-                self.labels_set.remove(selected_class)
-            self.used_label_indices_count[selected_class] += self.batch_size
-            yield indices
-
-    def __len__(self):
-        return len(self.dataset) // self.batch_size
 
 class AugmentedDataset(Dataset):
     def __init__(
@@ -49,54 +20,49 @@ class AugmentedDataset(Dataset):
         data: pd.DataFrame, 
         tokenizer: BertTokenizer, 
         max_token_len: int,
-        orig_column_name: str,
-        simp_column_name: str,
-        inter_column_name: str,
+        orig1_column_name: str,
+        orig2_column_name: str,
+        simp1_column_name: str,
+        simp2_column_name: str,
         label_column_name: str,
-        case_num_column_name: str,
-        can_aug_column_name: str,
+        group_id_column_name: str,
     ):
         self.data = data
         self.tokenizer = tokenizer
         self.max_token_len = max_token_len
-        self.orig_column_name = orig_column_name
-        self.simp_column_name = simp_column_name
-        self.inter_column_name = inter_column_name
+        self.orig1_column_name = orig1_column_name
+        self.orig2_column_name = orig2_column_name
+        self.simp1_column_name = simp1_column_name
+        self.simp2_column_name = simp2_column_name
         self.label_column_name = label_column_name
-        self.case_num_column_name = case_num_column_name
-        self.can_aug_column_name = can_aug_column_name
+        self.group_id_column_name = group_id_column_name
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, index):
         data_row = self.data.iloc[index]
-        orig = data_row[self.orig_column_name]
-        simp = data_row[self.simp_column_name]
-        inter = data_row[self.inter_column_name]
+        orig1 = data_row[self.orig1_column_name]
+        orig2 = data_row[self.orig2_column_name]
+        simp1 = data_row[self.simp1_column_name]
+        simp2 = data_row[self.simp2_column_name]
         label = data_row[self.label_column_name]
-        case_num = data_row[self.case_num_column_name]
-        can_aug = data_row[self.can_aug_column_name]
+        group_id = data_row[self.group_id_column_name]
 
-        enc_orig_orig = self.tokenizer.encode_plus(orig, orig, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-        enc_orig_simp = self.tokenizer.encode_plus(orig, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-        enc_simp_simp = self.tokenizer.encode_plus(simp, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
+        enc_orig = self.tokenizer.encode_plus(orig1, orig2, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
+        enc_simp = self.tokenizer.encode_plus(simp1, simp2, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
+
         return dict(
-            orig_orig=dict(
-                input_ids=enc_orig_orig["input_ids"].flatten(),
-                attention_mask=enc_orig_orig["attention_mask"].flatten(),
+            origs=dict(
+                input_ids=enc_orig["input_ids"].flatten(),
+                attention_mask=enc_orig["attention_mask"].flatten(),
             ),
-            orig_simp=dict(
-                input_ids=enc_orig_simp["input_ids"].flatten(),
-                attention_mask=enc_orig_simp["attention_mask"].flatten(),
-            ),
-            simp_simp=dict(
-                input_ids=enc_simp_simp["input_ids"].flatten(),
-                attention_mask=enc_simp_simp["attention_mask"].flatten(),
+            simps=dict(
+                input_ids=enc_simp["input_ids"].flatten(),
+                attention_mask=enc_simp["attention_mask"].flatten(),               
             ),
             labels=torch.tensor(label),
-            case_nums=torch.tensor(case_num),
-            can_aug=can_aug,
+            group_ids=torch.tensor(group_id),
         )
 
 class CreateDataModule(pl.LightningDataModule):
@@ -107,12 +73,12 @@ class CreateDataModule(pl.LightningDataModule):
         test_df: pd.DataFrame = None, 
         batch_size: int = None, 
         max_token_len: int = None, 
-        orig_column_name: str = 'original',
-        simp_column_name: str = 'simple',
-        inter_column_name: str = 'inter',
+        orig1_column_name: str = 'orig1',
+        orig2_column_name: str = 'orig2',
+        simp1_column_name: str = 'simp1',
+        simp2_column_name: str = 'simp2',
         label_column_name: str = 'label',
-        case_num_column_name: str = 'case_num',
-        can_aug_column_name: str = 'can_aug',
+        group_id_column_name: str = 'group_id',
         pretrained_model='bert-base-uncased',
     ):
         super().__init__()
@@ -121,15 +87,12 @@ class CreateDataModule(pl.LightningDataModule):
         self.test_df = test_df
         self.batch_size = batch_size
         self.max_token_len = max_token_len
-        self.orig_column_name = orig_column_name
-        self.simp_column_name = simp_column_name
-        self.inter_column_name = inter_column_name
+        self.orig1_column_name = orig1_column_name
+        self.orig2_column_name = orig2_column_name
+        self.simp1_column_name = simp1_column_name
+        self.simp2_column_name = simp2_column_name
         self.label_column_name = label_column_name
-        self.case_num_column_name = case_num_column_name
-        self.can_aug_column_name = can_aug_column_name
-        self.can_aug_list_train = self.train_df[self.can_aug_column_name].tolist()
-        self.can_aug_list_valid = self.valid_df[self.can_aug_column_name].tolist()
-        self.can_aug_list_test = self.test_df[self.can_aug_column_name].tolist()
+        self.group_id_column_name = group_id_column_name
         self.tokenizer = BertTokenizer.from_pretrained(pretrained_model)
 
     def setup(self, stage):
@@ -138,35 +101,35 @@ class CreateDataModule(pl.LightningDataModule):
               self.train_df, 
               self.tokenizer, 
               self.max_token_len,
-              self.orig_column_name,
-              self.simp_column_name,
-              self.inter_column_name,
+              self.orig1_column_name,
+              self.orig2_column_name,
+              self.simp1_column_name,
+              self.simp2_column_name,
               self.label_column_name,
-              self.case_num_column_name,
-              self.can_aug_column_name,
+              self.group_id_column_name,
             )
           self.vaild_dataset = AugmentedDataset(
               self.valid_df, 
               self.tokenizer, 
               self.max_token_len,
-              self.orig_column_name,
-              self.simp_column_name,
-              self.inter_column_name,
+              self.orig1_column_name,
+              self.orig2_column_name,
+              self.simp1_column_name,
+              self.simp2_column_name,
               self.label_column_name,
-              self.case_num_column_name,
-              self.can_aug_column_name,
+              self.group_id_column_name,
             )
         if stage == "test":
           self.test_dataset = AugmentedDataset(
               self.test_df, 
               self.tokenizer, 
               self.max_token_len,
-              self.orig_column_name,
-              self.simp_column_name,
-              self.inter_column_name,
+              self.orig1_column_name,
+              self.orig2_column_name,
+              self.simp1_column_name,
+              self.simp2_column_name,
               self.label_column_name,
-              self.case_num_column_name,
-              self.can_aug_column_name,
+              self.group_id_column_name,
             )
 
     def train_dataloader(self):
@@ -214,21 +177,12 @@ class BertRanker(pl.LightningModule):
         return preds, output
 
     def training_step(self, batch, batch_idx):
-        orig_orig_preds, _ = self.forward(input_ids=batch["orig_orig"]["input_ids"], attention_mask=batch["orig_orig"]["attention_mask"])
-        orig_simp_preds, _ = self.forward(input_ids=batch["orig_simp"]["input_ids"], attention_mask=batch["orig_simp"]["attention_mask"])
-        simp_simp_preds, _ = self.forward(input_ids=batch["simp_simp"]["input_ids"], attention_mask=batch["simp_simp"]["attention_mask"])
-
-        #loss = 0
-        # w/o aug margin loss
-        loss = self.criterion(orig_simp_preds, orig_orig_preds, batch["labels"])
-        loss += self.criterion(orig_simp_preds, simp_simp_preds, batch["labels"])
-        loss /= 2
-
-        return {'loss': loss, 
-                'batch_preds': [orig_orig_preds, orig_simp_preds],
-                'batch_labels': batch["labels"],
-                'batch_can_aug': batch["can_aug"],
-                }
+        orig_preds, _ = self.forward(input_ids=batch["origs"]["input_ids"], attention_mask=batch["origs"]["attention_mask"])
+        simp_preds, _ = self.forward(input_ids=batch["simps"]["input_ids"], attention_mask=batch["simps"]["attention_mask"])
+        loss = self.criterion(simp_preds, orig_preds, batch["labels"])
+        return {'loss': loss,
+                'batch_preds': [orig_preds, simp_preds],
+                'batch_labels': batch["labels"]}
     
     def validation_step(self, batch, batch_idx):
         return self.training_step(batch, batch_idx)
@@ -237,13 +191,10 @@ class BertRanker(pl.LightningModule):
         return self.training_step(batch, batch_idx)
     
     def training_epoch_end(self, outputs, mode="train"):
-        epoch_orig_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs])
-        epoch_orig_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs])
-        epoch_simp_simp_preds = torch.cat([x['batch_preds'][2] for x in outputs])
+        epoch_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs])
+        epoch_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs])
         epoch_labels = torch.cat([x['batch_labels'] for x in outputs])
-        epoch_loss = self.criterion(epoch_orig_simp_preds, epoch_orig_orig_preds, epoch_labels)
-        epoch_loss += self.criterion(epoch_orig_simp_preds, epoch_simp_simp_preds, epoch_labels)
-        epoch_loss /= 2
+        epoch_loss = self.criterion(epoch_simp_preds, epoch_orig_preds, epoch_labels)
         self.log(f"{mode}_loss", epoch_loss, logger=True)
 
     def validation_epoch_end(self, outputs, mode="val"):
@@ -285,13 +236,16 @@ def main(cfg: DictConfig):
     wandb_logger.log_hyperparams(cfg)
     data = pd.read_pickle(cfg.path.data_file_name)
     data['label'] = 1
-    data.rename(columns={'comp':'original', 'simp':'simple'}, inplace=True)
-    train, test = train_test_split(data, test_size=cfg.training.test_size, shuffle=True)
-    train, valid = train_test_split(train, test_size=cfg.training.valid_size, shuffle=True)
+    #data.rename(columns={'comp':'original', 'simp':'simple'}, inplace=True)
+    splitter = GroupShuffleSplit(test_size=cfg.training.valid_size)
+    split = splitter.split(data, groups=data['group_id'])
+    train_inds, val_inds = next(split)
+    train = data.iloc[train_inds]
+    valid = data.iloc[val_inds]
     data_module = CreateDataModule(
         train_df=train,
         valid_df=valid,
-        test_df=test,
+        #test_df=test,
         batch_size=cfg.training.batch_size,
         max_token_len=cfg.model.max_token_len,
     )
@@ -317,9 +271,9 @@ def main(cfg: DictConfig):
     )
     trainer.fit(model, data_module)
                            
-    data_module.setup(stage='test')                       
-    results = trainer.test(ckpt_path=call_backs[1].best_model_path, datamodule=data_module)                      
-    print(results)
+    #data_module.setup(stage='test')                       
+    #results = trainer.test(ckpt_path=call_backs[1].best_model_path, datamodule=data_module)                      
+    #print(results)
 
 if __name__ == "__main__":
     main()

@@ -13,31 +13,28 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.data.sampler import BatchSampler
 from transformers import BertModel, BertTokenizer
+ 
 
-class SelectedClassBatchSampler(BatchSampler):
-    def __init__(self, dataset, batch_size, can_aug_list):
-        self.labels = torch.LongTensor(can_aug_list)
+class SelectedListSampler(BatchSampler):
+    def __init__(self, dataset, case_num_list, batch_list_size):
+        self.labels = torch.LongTensor(case_num_list)
         self.labels_set = list(set(self.labels.numpy()))
         self.label_to_indices = {label: np.where(self.labels.numpy() == label)[0]
                                     for label in self.labels_set}
-        for l in self.labels_set:
-            np.random.shuffle(self.label_to_indices[l])
+        #for l in self.labels_set:
+        #    np.random.shuffle(self.label_to_indices[l])
         self.used_label_indices_count = {label: 0 for label in self.labels_set}
         self.dataset = dataset
-        self.batch_size = batch_size
+        #self.batch_size = batch_size
+        self.batch_list_size = batch_list_size
     
     def __iter__(self):
         while len(self.labels_set) != 0:
-            selected_class = np.random.choice(self.labels_set, 1, replace=False)[0]
+            selected_classes = np.random.choice(self.labels_set, self.batch_list_size, replace=False)
             indices = []
-            start_ind = self.used_label_indices_count[selected_class]
-            end_ind = min(self.used_label_indices_count[selected_class]+self.batch_size, len(self.label_to_indices[selected_class]))
-            indices.extend(
-                self.label_to_indices[selected_class][start_ind:end_ind]
-            )
-            if self.used_label_indices_count[selected_class] + self.batch_size > len(self.label_to_indices[selected_class]):
+            for selected_class in selected_classes:
+                indices.extend(self.label_to_indices[selected_class][:])
                 self.labels_set.remove(selected_class)
-            self.used_label_indices_count[selected_class] += self.batch_size
             yield indices
 
     def __len__(self):
@@ -51,20 +48,18 @@ class AugmentedDataset(Dataset):
         max_token_len: int,
         orig_column_name: str,
         simp_column_name: str,
-        inter_column_name: str,
         label_column_name: str,
         case_num_column_name: str,
-        can_aug_column_name: str,
+        difference_column_name: str,
     ):
         self.data = data
         self.tokenizer = tokenizer
         self.max_token_len = max_token_len
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
-        self.inter_column_name = inter_column_name
         self.label_column_name = label_column_name
         self.case_num_column_name = case_num_column_name
-        self.can_aug_column_name = can_aug_column_name
+        self.difference_column_name = difference_column_name
 
     def __len__(self):
         return len(self.data)
@@ -73,30 +68,19 @@ class AugmentedDataset(Dataset):
         data_row = self.data.iloc[index]
         orig = data_row[self.orig_column_name]
         simp = data_row[self.simp_column_name]
-        inter = data_row[self.inter_column_name]
         label = data_row[self.label_column_name]
         case_num = data_row[self.case_num_column_name]
-        can_aug = data_row[self.can_aug_column_name]
+        difference = data_row[self.difference_column_name]
 
-        enc_orig_orig = self.tokenizer.encode_plus(orig, orig, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
         enc_orig_simp = self.tokenizer.encode_plus(orig, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
-        enc_simp_simp = self.tokenizer.encode_plus(simp, simp, add_special_tokens=True, max_length=self.max_token_len, padding="max_length", truncation=True, return_attention_mask=True, return_tensors='pt')
         return dict(
-            orig_orig=dict(
-                input_ids=enc_orig_orig["input_ids"].flatten(),
-                attention_mask=enc_orig_orig["attention_mask"].flatten(),
-            ),
             orig_simp=dict(
-                input_ids=enc_orig_simp["input_ids"].flatten(),
+                input_ids=enc_orig_simp["input_ids"].flaten(),
                 attention_mask=enc_orig_simp["attention_mask"].flatten(),
-            ),
-            simp_simp=dict(
-                input_ids=enc_simp_simp["input_ids"].flatten(),
-                attention_mask=enc_simp_simp["attention_mask"].flatten(),
             ),
             labels=torch.tensor(label),
             case_nums=torch.tensor(case_num),
-            can_aug=can_aug,
+            differences=torch.tensor(difference),
         )
 
 class CreateDataModule(pl.LightningDataModule):
@@ -109,10 +93,9 @@ class CreateDataModule(pl.LightningDataModule):
         max_token_len: int = None, 
         orig_column_name: str = 'original',
         simp_column_name: str = 'simple',
-        inter_column_name: str = 'inter',
         label_column_name: str = 'label',
         case_num_column_name: str = 'case_num',
-        can_aug_column_name: str = 'can_aug',
+        difference_column_name: str = 'difference',
         pretrained_model='bert-base-uncased',
     ):
         super().__init__()
@@ -123,13 +106,12 @@ class CreateDataModule(pl.LightningDataModule):
         self.max_token_len = max_token_len
         self.orig_column_name = orig_column_name
         self.simp_column_name = simp_column_name
-        self.inter_column_name = inter_column_name
         self.label_column_name = label_column_name
         self.case_num_column_name = case_num_column_name
-        self.can_aug_column_name = can_aug_column_name
-        self.can_aug_list_train = self.train_df[self.can_aug_column_name].tolist()
-        self.can_aug_list_valid = self.valid_df[self.can_aug_column_name].tolist()
-        self.can_aug_list_test = self.test_df[self.can_aug_column_name].tolist()
+        self.difference_column_name = difference_column_name
+        self.case_num_list_train = self.train_df[self.case_num_column_name].tolist()
+        self.case_num_list_valid = self.valid_df[self.case_num_column_name].tolist()
+        self.case_num_list_test = self.test_df[self.case_num_column_name].tolist()
         self.tokenizer = BertTokenizer.from_pretrained(pretrained_model)
 
     def setup(self, stage):
@@ -140,10 +122,9 @@ class CreateDataModule(pl.LightningDataModule):
               self.max_token_len,
               self.orig_column_name,
               self.simp_column_name,
-              self.inter_column_name,
               self.label_column_name,
               self.case_num_column_name,
-              self.can_aug_column_name,
+              self.difference_column_name,
             )
           self.vaild_dataset = AugmentedDataset(
               self.valid_df, 
@@ -151,10 +132,9 @@ class CreateDataModule(pl.LightningDataModule):
               self.max_token_len,
               self.orig_column_name,
               self.simp_column_name,
-              self.inter_column_name,
               self.label_column_name,
               self.case_num_column_name,
-              self.can_aug_column_name,
+              self.difference_column_name,
             )
         if stage == "test":
           self.test_dataset = AugmentedDataset(
@@ -163,20 +143,19 @@ class CreateDataModule(pl.LightningDataModule):
               self.max_token_len,
               self.orig_column_name,
               self.simp_column_name,
-              self.inter_column_name,
               self.label_column_name,
               self.case_num_column_name,
-              self.can_aug_column_name,
+              self.difference_column_name,
             )
 
     def train_dataloader(self):
-        return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=os.cpu_count())
+        return DataLoader(self.train_dataset, num_workers=os.cpu_count(), batch_sampler=SelectedListSampler(self.train_dataset, case_num_list=self.case_num_list_train, batch_list_size=1))
 
     def val_dataloader(self):
-        return DataLoader(self.vaild_dataset, batch_size=self.batch_size, num_workers=os.cpu_count())
+        return DataLoader(self.vaild_dataset, num_workers=os.cpu_count(), batch_sampler=SelectedListSampler(self.train_dataset, case_num_list=self.case_num_list_train, batch_list_size=1))
 
     def test_dataloader(self):
-        return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=os.cpu_count())
+        return DataLoader(self.test_dataset, num_workers=os.cpu_count(), batch_sampler=SelectedListSampler(self.train_dataset, case_num_list=self.case_num_list_train, batch_list_size=1))
 
 class BertRanker(pl.LightningModule):
     def __init__(
@@ -214,21 +193,34 @@ class BertRanker(pl.LightningModule):
         return preds, output
 
     def training_step(self, batch, batch_idx):
-        orig_orig_preds, _ = self.forward(input_ids=batch["orig_orig"]["input_ids"], attention_mask=batch["orig_orig"]["attention_mask"])
-        orig_simp_preds, _ = self.forward(input_ids=batch["orig_simp"]["input_ids"], attention_mask=batch["orig_simp"]["attention_mask"])
-        simp_simp_preds, _ = self.forward(input_ids=batch["simp_simp"]["input_ids"], attention_mask=batch["simp_simp"]["attention_mask"])
+        batch_case_nums_set = batch["case_nums"].unique()
+        batch_differences = batch["differences"]
+        loss = 0
+        batch_preds, _ = self.forward(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"])
+        for case_num in batch_case_nums_set:
+            #difference == 0 preds in batch_preds
+            diff0_preds = batch_preds[[(batch_differences == 0) & (batch["case_nums"] == case_num)]]
 
-        #loss = 0
-        # w/o aug margin loss
-        loss = self.criterion(orig_simp_preds, orig_orig_preds, batch["labels"])
-        loss += self.criterion(orig_simp_preds, simp_simp_preds, batch["labels"])
-        loss /= 2
+            #difference == 1 preds in batch_preds
+            diff1_preds = batch_preds[[(batch_differences == 0) & (batch["case_nums"] == case_num)]]
+        
+            #difference == 2 preds in batch_preds
+            diff2_preds = batch_preds[[(batch_differences == 0) & (batch["case_nums"] == case_num)]]
 
+            #loss btw diff0 and diff2
+            for i in range(len(batch_differences[(batch_differences == 0) & (batch["case_nums"] == case_num)])):
+                for j in range(len(batch_differences[(batch_differences == 2) & (batch["case_nums"] == case_num)])):
+                    loss += self.criterion(diff2_preds[j], diff0_preds[i], torch.tensor(1))
+            loss /= 2
+
+            #loss btw diff0 and diff1
         return {'loss': loss, 
-                'batch_preds': [orig_orig_preds, orig_simp_preds],
                 'batch_labels': batch["labels"],
-                'batch_can_aug': batch["can_aug"],
+                'batch_case_num': batch["case_nums"],
+                'batch_differences': batch["differences"],
                 }
+
+
     
     def validation_step(self, batch, batch_idx):
         return self.training_step(batch, batch_idx)
@@ -237,20 +229,41 @@ class BertRanker(pl.LightningModule):
         return self.training_step(batch, batch_idx)
     
     def training_epoch_end(self, outputs, mode="train"):
-        epoch_orig_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs])
-        epoch_orig_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs])
-        epoch_simp_simp_preds = torch.cat([x['batch_preds'][2] for x in outputs])
-        epoch_labels = torch.cat([x['batch_labels'] for x in outputs])
-        epoch_loss = self.criterion(epoch_orig_simp_preds, epoch_orig_orig_preds, epoch_labels)
-        epoch_loss += self.criterion(epoch_orig_simp_preds, epoch_simp_simp_preds, epoch_labels)
-        epoch_loss /= 2
+        epoch_loss = 0
+
+        #w/o aug margin loss
+        epoch_woaug_orig_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs if x['batch_can_aug'][0].item() == 0])
+        epoch_woaug_orig_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs if x['batch_can_aug'][0].item() == 0])
+        epoch_woaug_simp_simp_preds = torch.cat([x['batch_preds'][2] for x in outputs if x['batch_can_aug'][0].item() == 0])
+        epoch_woaug_labels = torch.cat([x['batch_labels'] for x in outputs if x['batch_can_aug'][0].item() == 0])
+        epoch_loss += self.criterion(epoch_woaug_orig_simp_preds, epoch_woaug_orig_orig_preds, epoch_woaug_labels)
+        epoch_loss += self.criterion(epoch_woaug_orig_simp_preds, epoch_woaug_simp_simp_preds, epoch_woaug_labels)
+
+        #w/ aug margin loss
+        epoch_waug_orig_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs if x['batch_can_aug'][0].item() == 1])
+        epoch_waug_orig_simp_preds = torch.cat([x['batch_preds'][1] for x in outputs if x['batch_can_aug'][0].item() == 1])
+        epoch_waug_simp_simp_preds = torch.cat([x['batch_preds'][2] for x in outputs if x['batch_can_aug'][0].item() == 1])
+        epoch_waug_orig_inter_preds = torch.cat([x['batch_preds'][3] for x in outputs if x['batch_can_aug'][0].item() == 1])
+        epoch_waug_inter_simp_preds = torch.cat([x['batch_preds'][4] for x in outputs if x['batch_can_aug'][0].item() == 1])
+        epoch_waug_inter_inter_preds = torch.cat([x['batch_preds'][5] for x in outputs if x['batch_can_aug'][0].item() == 1])
+        epoch_waug_labels = torch.cat([x['batch_labels'] for x in outputs if x['batch_can_aug'][0].item() == 1])
+        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_orig_orig_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_simp_simp_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_inter_preds, epoch_waug_orig_orig_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_inter_preds, epoch_waug_simp_simp_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_inter_preds, epoch_waug_inter_inter_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_inter_simp_preds, epoch_waug_orig_orig_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_inter_simp_preds, epoch_waug_simp_simp_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_inter_simp_preds, epoch_waug_inter_inter_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_orig_inter_preds, epoch_waug_labels)
+        epoch_loss += self.criterion(epoch_waug_orig_simp_preds, epoch_waug_inter_simp_preds, epoch_waug_labels)
         self.log(f"{mode}_loss", epoch_loss, logger=True)
 
     def validation_epoch_end(self, outputs, mode="val"):
-        return self.training_epoch_end(outputs, mode)
+        return self.training_epoch_end(outputs, "val")
 
-    def test_epoch_end(self, outputs, mode="test"):
-        return self.training_epoch_end(outputs, mode)
+    def test_epoch_end(self, outputs):
+        return self.training_epoch_end(outputs, "test")
 
     def configure_optimizers(self):
         return optim.AdamW(self.parameters(), lr=self.lr)
