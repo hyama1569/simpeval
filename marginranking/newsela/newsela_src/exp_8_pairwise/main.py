@@ -176,19 +176,20 @@ class BertRanker(pl.LightningModule):
         preds = torch.flatten(preds)
         return preds, output
 
-    def training_step(self, batch, batch_idx):
+    def training_step(self, batch, batch_idx, mode="train"):
         orig_preds, _ = self.forward(input_ids=batch["origs"]["input_ids"], attention_mask=batch["origs"]["attention_mask"])
         simp_preds, _ = self.forward(input_ids=batch["simps"]["input_ids"], attention_mask=batch["simps"]["attention_mask"])
         loss = self.criterion(simp_preds, orig_preds, batch["labels"])
+        self.log(f"{mode}_step_loss", loss, logger=True)
         return {'loss': loss,
                 'batch_preds': [orig_preds, simp_preds],
                 'batch_labels': batch["labels"]}
     
     def validation_step(self, batch, batch_idx):
-        return self.training_step(batch, batch_idx)
+        return self.training_step(batch, batch_idx, mode="val")
 
     def test_step(self, batch, batch_idx):
-        return self.training_step(batch, batch_idx)
+        return self.training_step(batch, batch_idx, mode="test")
     
     def training_epoch_end(self, outputs, mode="train"):
         epoch_orig_preds = torch.cat([x['batch_preds'][0] for x in outputs])
