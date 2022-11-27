@@ -138,16 +138,7 @@ path:
 
   #exp_2 (100%, intercomp)
   ##m=1
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug1_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug2_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug3_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug4_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug5_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug6_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug7_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug8_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug9_100.pickle
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m1aug10_100.pickle
+  ##done in exp_2 (100%)
   ##m=2
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m2aug1_100.pickle
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m2aug2_100.pickle
@@ -170,6 +161,17 @@ path:
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m3aug8_100.pickle
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m3aug9_100.pickle
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m3aug10_100.pickle
+  ##m=4
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug10_100.pickle
 
   checkpoint_path: checkpoints
 model:
