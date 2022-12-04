@@ -28,6 +28,8 @@ def create_text_to_edit(edits, sent1_tok, sent2_tok, nlp):
 
 def get_edit_sequences(sent1_toks, sent2_toks, aligns):
     edit_sequences = []
+    edits_ls = []
+    spans_ls = []
     for i in tqdm.tqdm(range(len(aligns))):
         sent1_tok = sent1_toks[i]
         sent2_tok = sent2_toks[i]
@@ -45,7 +47,9 @@ def get_edit_sequences(sent1_toks, sent2_toks, aligns):
 
         edit_sequence = splr_ids + rep_ids + ad_ids + mvr_ids + d_ids + a_ids
         edit_sequences.append(edit_sequence)
-    return edit_sequences
+        edits_ls.append(edits)
+        spans_ls.append((('ad_spans', ad_spans), ('d_spans', d_spans), ('a_spans', a_spans)))
+    return edit_sequences, edits_ls, spans_ls
 
 def apply_edit_sequences(edit_sequences, sent1_toks, sent2_toks, nlp, max_cnt):
     random.seed(111)
