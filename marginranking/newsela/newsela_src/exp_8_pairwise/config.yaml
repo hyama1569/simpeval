@@ -1,5 +1,5 @@
 wandb:
-  project: newsela_intercomp_v6_pw_exp2
+  project: newsela_v7_pw_exp1
   exp_num: 1
   tags: [bert]
 path:
@@ -173,6 +173,32 @@ path:
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug9_100.pickle
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_intercomp_aug_trainable_m4aug10_100.pickle
 
+  #exp_3 (100%, gold, NPRM)
+  ##m=0 (w/o aug)
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_100.pickle
+  ##m=1
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug10_100.pickle
+  ##m=2
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m2aug10_100.pickle
+  
   checkpoint_path: checkpoints
 model:
   n_classes: 1
@@ -183,8 +209,8 @@ model:
 training:
   pl_seed: 1
   #test_size: 0.3
-  valid_size: 0.3
-  n_epochs: 5
+  valid_size: 0.2
+  n_epochs: 10
   batch_size: 16
   learning_rate: 0.0001
   n_gpus: 1
