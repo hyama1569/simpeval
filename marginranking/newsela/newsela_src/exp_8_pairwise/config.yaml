@@ -175,7 +175,7 @@ path:
 
   #exp_3 (100%, gold, NPRM)
   ##m=0 (w/o aug)
-  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_trainable_100.pickle
   ##m=1
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug1_100.pickle
   #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_only_nprm_aug_trainable_m1aug2_100.pickle
