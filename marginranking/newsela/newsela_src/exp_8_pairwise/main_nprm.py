@@ -153,7 +153,7 @@ class BertRanker(pl.LightningModule):
             cls = output.pooler_output
             #output = torch.cat([added_features.float(), cls], dim=1)
             preds = self.classifier(cls)
-        preds = torch.flatten(preds)
+        #preds = torch.flatten(preds)
         return preds, output
 
     def training_step(self, batch, batch_idx, mode="train"):
