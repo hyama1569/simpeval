@@ -50,7 +50,7 @@ class AugmentedDataset(Dataset):
                 input_ids=enc["input_ids"].flatten(),
                 attention_mask=enc["attention_mask"].flatten(),                     
             ),
-            labels=torch.tensor(label),
+            labels=torch.tensor(label).float(),
             group_ids=torch.tensor(group_id),
         )
 
