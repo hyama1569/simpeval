@@ -1,0 +1,122 @@
+wandb:
+  project: newsela_v13_nprm_exp1
+  exp_num: 1
+  tags: [bert]
+path:
+  #exp1 (expnum=1)
+  ##25% (exp_num=1)
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext1_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext2_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext3_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext4_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext5_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext6_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext7_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext8_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext9_25.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext10_25.pickle
+  ##50% (exp_num=2)
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext1_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext2_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext3_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext4_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext5_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext6_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext7_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext8_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext9_50.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext10_50.pickle
+  ##75% (exp_num=3)
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext1_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext2_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext3_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext4_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext5_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext6_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext7_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext8_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext9_75.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_ext10_75.pickle
+  ##100% (exp_num=4)
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_base_100.pickle
+
+  #exp_2 gold (expnum=2)
+  ##m=1 
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m1aug10_100.pickle
+  ##m=2
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m2aug10_100.pickle
+  ##m=3
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m3aug10_100.pickle
+  ##m=4
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_gold_m4aug10_100.pickle
+
+  #exp_2 silver (expnum=3)
+  ##m=1
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v13_silver_m1aug10_100.pickle
+
+#===================================================================================================================================
+  
+  checkpoint_path: checkpoints
+model:
+  n_classes: 1
+  dropout_rate: 0.2
+  max_token_len: 512
+  pooling_type: cls
+  added_feature_num: 0
+training:
+  pl_seed: 1
+  #test_size: 0.3
+  valid_size: 0.2
+  n_epochs: 10
+  batch_size: 16
+  learning_rate: 0.0001
+  n_gpus: 1
+
+callbacks:
+  patience: 3
+  patience_min_delta: 0
