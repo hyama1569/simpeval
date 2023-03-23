@@ -1,0 +1,52 @@
+wandb:
+  project: newsela_v11_nprm_filtered_exp2
+  exp_num: 1
+  tags: [bert]
+path:
+  #exp_2 gold (expnum=2)
+  ##m=1 
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_gold_filtered_m1aug10_100.pickle
+
+  #exp_2 silver (expnum=3)
+  ##m=1
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/newsela/data/newsela_nprm_v11_silver_filtered_m1aug10_100.pickle
+
+#===================================================================================================================================
+  
+  checkpoint_path: checkpoints
+model:
+  n_classes: 2
+  dropout_rate: 0.2
+  max_token_len: 512
+  pooling_type: cls
+  added_feature_num: 0
+training:
+  pl_seed: 1
+  #test_size: 0.3
+  valid_size: 0.2
+  n_epochs: 10
+  batch_size: 16
+  learning_rate: 0.0001
+  n_gpus: 1
+
+callbacks:
+  patience: 3
+  patience_min_delta: 0
