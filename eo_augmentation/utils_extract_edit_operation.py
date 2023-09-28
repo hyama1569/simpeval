@@ -249,37 +249,56 @@ def extract_mvr_ids(edits, ad_spans, d_spans, a_spans, sent2_tok, aligns):
             mvr_ids.append(tmp_ids)
     return mvr_ids
 
-def extract_d_ids(edits, d_spans, sent2_tok, aligns):
-    edits_ids = assign_ids_to_edits(edits, sent2_tok)
+
+def extract_ad_ids(ad_spans):
+    ad_ids = []
+    for ad_span_idx in range(len(ad_spans)):
+        ad_ids.append(['ad_span', ad_span_idx])
+    return ad_ids
+
+def extract_d_ids(d_spans):
     d_ids = []
     for d_span_idx in range(len(d_spans)):
-        d_span = list(range(d_spans[d_span_idx][0], d_spans[d_span_idx][1]+1))
-        sent1_ids_corresponding_d_span = [edits_ids[i] for i in d_span if edits[i] == 'DEL']
-
-        aligned_words_in_sent2_form_d_span = []
-        for i in range(len(sent1_ids_corresponding_d_span)):
-            for j in range(len(aligns)):
-                if sent1_ids_corresponding_d_span[i] in aligns[j][0]:
-                    for aligned_word_id in aligns[j][1]:
-                        aligned_words_in_sent2_form_d_span.append(sent2_tok[aligned_word_id])
-        
-        if len(aligned_words_in_sent2_form_d_span) == 0:
-            d_ids.append(['d_span', d_span_idx])
-    
+        d_ids.append(['d_span', d_span_idx])
     return d_ids
 
-def extract_a_ids(a_spans, mvr_ids):
+def extract_a_ids(a_spans):
     a_ids = []
-    a_spans_done = []
-    for mvr_info in mvr_ids:
-        for i in range(1, len(mvr_info)):
-            if mvr_info[i][0] == 'a_span':
-                a_spans_done.append(mvr_info[i][1])
-
     for a_span_idx in range(len(a_spans)):
-        if a_span_idx in a_spans_done:
-            continue
-        else:
-            a_ids.append(['a_span', a_span_idx])
-
+        a_ids.append(['a_span', a_span_idx])
     return a_ids
+
+# def extract_d_ids(edits, d_spans, sent2_tok, aligns):
+#     edits_ids = assign_ids_to_edits(edits, sent2_tok)
+#     d_ids = []
+#     for d_span_idx in range(len(d_spans)):
+#         d_span = list(range(d_spans[d_span_idx][0], d_spans[d_span_idx][1]+1))
+#         sent1_ids_corresponding_d_span = [edits_ids[i] for i in d_span if edits[i] == 'DEL']
+
+#         aligned_words_in_sent2_form_d_span = []
+#         for i in range(len(sent1_ids_corresponding_d_span)):
+#             for j in range(len(aligns)):
+#                 if sent1_ids_corresponding_d_span[i] in aligns[j][0]:
+#                     for aligned_word_id in aligns[j][1]:
+#                         aligned_words_in_sent2_form_d_span.append(sent2_tok[aligned_word_id])
+        
+#         if len(aligned_words_in_sent2_form_d_span) == 0:
+#             d_ids.append(['d_span', d_span_idx])
+    
+#     return d_ids
+
+# def extract_a_ids(a_spans, mvr_ids):
+#     a_ids = []
+#     a_spans_done = []
+#     for mvr_info in mvr_ids:
+#         for i in range(1, len(mvr_info)):
+#             if mvr_info[i][0] == 'a_span':
+#                 a_spans_done.append(mvr_info[i][1])
+
+#     for a_span_idx in range(len(a_spans)):
+#         if a_span_idx in a_spans_done:
+#             continue
+#         else:
+#             a_ids.append(['a_span', a_span_idx])
+
+#     return a_ids
