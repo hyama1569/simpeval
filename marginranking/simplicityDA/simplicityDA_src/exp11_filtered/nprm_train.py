@@ -219,8 +219,8 @@ def main(cfg: DictConfig):
     data = pd.read_pickle(cfg.path.data_file_name)
     #data['label'] = 1
     #data.rename(columns={'comp':'original', 'simp':'simple'}, inplace=True)
-    splitter = GroupShuffleSplit(test_size=cfg.training.valid_size)
-    split = splitter.split(data, groups=data['group_id'])
+    splitter = train_test_split(test_size=cfg.training.valid_size)
+    split = splitter.split(data)
     train_inds, val_inds = next(split)
     train = data.iloc[train_inds]
     valid = data.iloc[val_inds]
