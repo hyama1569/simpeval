@@ -1,5 +1,5 @@
 wandb:
-  project: simplicityDA_v11_nprm_filtered_100
+  project: simplicityDA_v11_nprm_filtered_trial2_100
   exp_num: 11
   tags: [bert]
 path:
