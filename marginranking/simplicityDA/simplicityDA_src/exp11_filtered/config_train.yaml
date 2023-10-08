@@ -18,6 +18,23 @@ path:
   #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_m1aug8_100.pickle
   #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_m1aug9_100.pickle
   #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_m1aug10_100.pickle
+
+
+  #base (trial2, expnum=1x)
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_base_trial2_100.pickle
+
+  #+silver (trial2, expnum=2x)
+  ##m=1
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug1_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug2_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug3_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug4_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug5_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug6_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug7_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug8_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug9_100.pickle
+  #data_file_name: /workspace/simpeval/marginranking/simplicityDA/data/simplicityDA_nprm_v11_silver_filtered_trial2_m1aug10_100.pickle
   
 #===================================================================================================================================
   
